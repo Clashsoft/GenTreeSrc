@@ -1,0 +1,22 @@
+importDeclaration(qualifiedType) ::= <<
+import <qualifiedType>;
+
+>>
+
+treeInterface(packageName, imports, className, superClass, classBody) ::= <<
+package <packageName>;
+
+<imports>
+
+public interface <className><if(superClass)> extends <superClass><endif>
+{
+	<classBody>
+}
+>>
+
+treeImplClass(className, superClass, implClassBody) ::= <<
+class <className>Impl extends <superClass>Impl implements <className>
+{
+	<implClassBody>
+}
+>>

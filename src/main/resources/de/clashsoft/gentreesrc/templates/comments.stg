@@ -1,0 +1,14 @@
+generatedComment(text) ::= <<
+////////////////// <text> //////////////////
+
+>>
+
+sectionComment(text) ::= <<
+// =============== <text> ===============
+
+>>
+
+subsectionComment(text) ::= <<
+// --------------- <text> ---------------
+
+>>

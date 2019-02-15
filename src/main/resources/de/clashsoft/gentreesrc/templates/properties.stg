@@ -1,0 +1,37 @@
+property(name, type) ::= <<
+<getter(name, type)>
+<setter(name, type)>
+
+>>
+
+getter(name, type) ::= <<
+<type> get<name; format="cap">();
+
+>>
+
+setter(name, type) ::= <<
+void set<name; format="cap">(<type> <name>);
+
+>>
+
+propertyImpl(name, type) ::= <<
+<field(name, type)>
+<getterImpl(name, type)>
+<setterImpl(name, type)>
+
+>>
+
+field(name, type) ::= <<
+private <type> <name>;
+
+>>
+
+getterImpl(name, type) ::= <<
+public <type> get<name; format="cap">() { return this.<name> }
+
+>>
+
+setterImpl(name, type) ::= <<
+public void set<name; format="cap">(<type> <name>) { this.<name> = <name> }
+
+>>

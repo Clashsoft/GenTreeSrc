@@ -1,0 +1,23 @@
+ofMethod(className, parameters, arguments) ::= <<
+static <className> of(<parameters>)
+{
+	return new <className>Impl(<arguments>);
+}
+
+
+>>
+
+acceptMethod(className, superClass) ::= <<
+public \<P, R> R accept(<superClass>Visitor\<P, R> visitor, P par);
+
+
+>>
+
+acceptMethodImpl(className, superClass) ::= <<
+public \<P, R> R accept(<superClass>Visitor\<P, R> visitor, P par)
+{
+	return visitor.accept<className>(this, par);
+}
+
+
+>>
