@@ -22,15 +22,17 @@ property:
 	name=IDENTIFIER ':' propertyType;
 
 propertyType:
-	IDENTIFIER
+	typeName=IDENTIFIER
 	|
-	'[' arrayElementType=IDENTIFIER ']'
+	'[' elementType=IDENTIFIER ']'
+	/*
 	|
 	optionalType=IDENTIFIER '?'
 	|
 	'final' immutableType=IDENTIFIER
 	|
 	varargsType=IDENTIFIER '...'
+	*/
 	;
 
 packageName: (IDENTIFIER '.')*;
