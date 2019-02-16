@@ -14,11 +14,15 @@ private <type> <name>;
 >>
 
 getterImpl(name, type) ::= <<
-public <type> get<name; format="cap">() { return this.<name>; }
+@Override public <type> get<name; format="cap">() { return this.<name>; }
 
 >>
 
 setterImpl(name, type) ::= <<
-public void set<name; format="cap">(<type> <name>) { this.<name> = <name>; }
+@Override public void set<name; format="cap">(<type> <name>) { <setThis(name, type)> }
 
 >>
+
+setThis(name, type) ::= <%
+this.<name> = <name>;
+%>
