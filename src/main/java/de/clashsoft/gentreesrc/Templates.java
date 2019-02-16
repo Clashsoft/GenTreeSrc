@@ -5,6 +5,8 @@ import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
 import org.stringtemplate.v4.StringRenderer;
 
+import java.util.List;
+
 public class Templates
 {
 	// =============== Static Fields ===============
@@ -53,6 +55,15 @@ public class Templates
 		return template.render();
 	}
 
+	public static String visitorInterface(String className, List<String> superInterfaces, String body)
+	{
+		final ST template = classesGroup.getInstanceOf("visitorInterface");
+		template.add("className", className);
+		template.add("superInterfaces", superInterfaces);
+		template.add("body", body);
+		return template.render();
+	}
+
 	// --------------- Comments ---------------
 
 	private static String comment(String templateName, String text)
@@ -85,6 +96,30 @@ public class Templates
 		template.add("className", className);
 		template.add("parameters", parameters);
 		template.add("body", body);
+		return template.render();
+	}
+
+	public static String acceptMethod(String className, String superClass)
+	{
+		final ST template = methodsGroup.getInstanceOf("acceptMethod");
+		template.add("className", className);
+		template.add("superClass", superClass);
+		return template.render();
+	}
+
+	public static String acceptMethodImpl(String className, String superClass)
+	{
+		final ST template = methodsGroup.getInstanceOf("acceptMethodImpl");
+		template.add("className", className);
+		template.add("superClass", superClass);
+		return template.render();
+	}
+
+	public static String visitMethod(boolean override, String className)
+	{
+		final ST template = methodsGroup.getInstanceOf("visitMethod");
+		template.add("override", override);
+		template.add("className", className);
 		return template.render();
 	}
 

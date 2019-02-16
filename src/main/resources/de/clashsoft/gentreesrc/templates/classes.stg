@@ -22,3 +22,11 @@ class Impl<if(superClass)> extends <superClass>.Impl<endif> implements <classNam
 }
 
 >>
+
+visitorInterface(className, superInterfaces, body) ::= <<
+interface Visitor\<P, R><if(superInterfaces)> extends <superInterfaces:{s|<s>.Visitor\<P, R>}; separator=", "><endif>
+{
+	<body>
+}
+
+>>

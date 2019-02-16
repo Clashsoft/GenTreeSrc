@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -47,6 +48,7 @@ public class Generator
 		Set<String> imports = new HashSet<>();
 		StringBuilder classBody = new StringBuilder();
 		StringBuilder implClassBody = new StringBuilder();
+		final StringBuilder visitorClassBody = new StringBuilder();
 
 		generateOfMethod(decl, classBody);
 
@@ -64,18 +66,34 @@ public class Generator
 			generateImplProperties(decl, implClassBody);
 		}
 
-		// generate impl and main class
+		generateAcceptMethods(decl, classBody);
+		generateAcceptImpls(decl, implClassBody);
 
-		final String packageName = decl.getPackageName();
+		generateVisitorMethods(decl, visitorClassBody);
 
-		final String importText = imports.stream().map(Templates::importDeclaration).collect(Collectors.joining());
+		// classes
 
 		final String className = decl.getClassName();
 		final String superClass = decl.getSuperType() != null ? decl.getSuperType().getClassName() : null;
 
-		final String implClass = Templates.treeImplClass(className, superClass, implClassBody.toString());
 		classBody.append(Templates.sectionComment("Classes"));
+
+		// generate impl class
+
+		final String implClass = Templates.treeImplClass(className, superClass, implClassBody.toString());
 		classBody.append(implClass);
+
+		// generate visitor class
+		final List<String> visitorSuperInterfaces = decl.getSubTypes().stream().map(TypeDeclaration::getClassName)
+		                                                .collect(Collectors.toList());
+		final String visitorClass = Templates.visitorInterface(className, visitorSuperInterfaces,
+		                                                       visitorClassBody.toString());
+		classBody.append(visitorClass);
+
+		// generate main class
+
+		final String packageName = decl.getPackageName();
+		final String importText = imports.stream().map(Templates::importDeclaration).collect(Collectors.joining());
 
 		return Templates.treeInterface(packageName, importText, className, superClass, classBody.toString());
 	}
@@ -109,6 +127,13 @@ public class Generator
 				classBody.append(Templates.setter(property.getName(), property.getType()));
 			}
 		}
+	}
+
+	private static void generateAcceptMethods(TypeDeclaration decl, StringBuilder classBody)
+	{
+		classBody.append(Templates.sectionComment("Methods"));
+
+		classBody.append(Templates.acceptMethod(decl.getClassName(), decl.getClassName()));
 	}
 
 	private static void generateImplConstructor(TypeDeclaration decl, StringBuilder implClassBody)
@@ -146,6 +171,40 @@ public class Generator
 			{
 				implClassBody.append(Templates.setterImpl(property.getName(), property.getType()));
 			}
+		}
+	}
+
+	private static void generateAcceptImpls(TypeDeclaration decl, StringBuilder implClassBody)
+	{
+		implClassBody.append(Templates.sectionComment("Methods"));
+
+		implClassBody.append(Templates.acceptMethodImpl(decl.getClassName(), decl.getClassName()));
+	}
+
+	private static void generateVisitorMethods(TypeDeclaration decl, StringBuilder visitorClassBody)
+	{
+		visitorClassBody.append(Templates.sectionComment("Methods"));
+
+		generateVisitorMethodsRecursively(0, decl, visitorClassBody);
+	}
+
+	private static final int    MAX_TABS = 64;
+	private static       char[] tabs     = new char[MAX_TABS];
+
+	static
+	{
+		Arrays.fill(tabs, '\t');
+	}
+
+	private static void generateVisitorMethodsRecursively(int level, TypeDeclaration decl,
+		StringBuilder visitorClassBody)
+	{
+		visitorClassBody.append(tabs, 0, Math.min(MAX_TABS, level));
+		visitorClassBody.append(Templates.visitMethod(level != 0, decl.getClassName()));
+
+		for (TypeDeclaration subType : decl.getSubTypes())
+		{
+			generateVisitorMethodsRecursively(level + 1, subType, visitorClassBody);
 		}
 	}
 }

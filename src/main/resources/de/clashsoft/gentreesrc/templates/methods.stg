@@ -12,16 +12,19 @@ public <className>(<parameters>)
 >>
 
 acceptMethod(className, superClass) ::= <<
-public \<P, R> R accept(<superClass>Visitor\<P, R> visitor, P par);
-
+public \<P, R> R accept(<superClass>.Visitor\<P, R> visitor, P par);
 
 >>
 
 acceptMethodImpl(className, superClass) ::= <<
-public \<P, R> R accept(<superClass>Visitor\<P, R> visitor, P par)
+@Override public \<P, R> R accept(<superClass>.Visitor\<P, R> visitor, P par)
 {
-	return visitor.accept<className>(this, par);
+	return visitor.visit<className>(this, par);
 }
 
+>>
+
+visitMethod(override, className) ::= <<
+<if(override)>@Override <endif>R visit<className>(<className> <className>, P par);
 
 >>
