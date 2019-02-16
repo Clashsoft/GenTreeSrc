@@ -4,6 +4,7 @@ import de.clashsoft.gentreesrc.tree.DefinitionFile;
 import de.clashsoft.gentreesrc.tree.Property;
 import de.clashsoft.gentreesrc.tree.PropertyStyle;
 import de.clashsoft.gentreesrc.tree.TypeDeclaration;
+import de.clashsoft.gentreesrc.util.ImportHelper;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -11,9 +12,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
 
@@ -45,7 +46,6 @@ public class Generator
 
 	private static String generate(TypeDeclaration decl)
 	{
-		Set<String> imports = new HashSet<>();
 		StringBuilder classBody = new StringBuilder();
 		StringBuilder implClassBody = new StringBuilder();
 		final StringBuilder visitorClassBody = new StringBuilder();
@@ -54,12 +54,6 @@ public class Generator
 
 		if (!decl.getProperties().isEmpty())
 		{
-			if (decl.getProperties().stream().anyMatch(p -> p.getStyle() == PropertyStyle.LIST))
-			{
-				imports.add("java.util.List");
-				imports.add("java.util.ArrayList");
-			}
-
 			generateProperties(decl, classBody);
 			generateImplFields(decl, implClassBody);
 			generateImplConstructor(decl, implClassBody);
@@ -90,11 +84,14 @@ public class Generator
 		                                                       visitorClassBody.toString());
 		classBody.append(visitorClass);
 
-		// generate main class
+		// imports
 
 		final String packageName = decl.getPackageName();
+		Set<String> imports = new TreeSet<>();
+		ImportHelper.collectImports(decl, imports);
 		final String importText = imports.stream().map(Templates::importDeclaration).collect(Collectors.joining());
 
+		// generate main class
 		return Templates.treeInterface(packageName, importText, className, superClass, classBody.toString());
 	}
 
