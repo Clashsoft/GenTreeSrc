@@ -17,10 +17,11 @@ public interface Node
 		}
 
 	}
-	interface Visitor<P, R> extends DefinitionFile.Visitor<P, R>, Property.Visitor<P, R>, TypeDeclaration.Visitor<P, R>
+	interface Visitor<P, R> extends Import.Visitor<P, R>, DefinitionFile.Visitor<P, R>, Property.Visitor<P, R>, TypeDeclaration.Visitor<P, R>
 	{
 		// =============== Methods ===============
 		R visitNode(Node Node, P par);
+			@Override R visitImport(Import Import, P par);
 			@Override R visitDefinitionFile(DefinitionFile DefinitionFile, P par);
 			@Override R visitProperty(Property Property, P par);
 			@Override R visitTypeDeclaration(TypeDeclaration TypeDeclaration, P par);

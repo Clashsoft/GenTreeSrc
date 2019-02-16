@@ -1,10 +1,10 @@
 de.clashsoft.gentreesrc.tree.Node {
-	// Import(packageName: String, typeName: String)
+	Import(packageName: String, typeName: String)
 	/*```
 	import <packageName>.<typeName>;
 	```*/
 
-	DefinitionFile(declarations: [TypeDeclaration])
+	DefinitionFile(imports: [Import], declarations: [TypeDeclaration])
 	/*```
 	<imports\n...>
 

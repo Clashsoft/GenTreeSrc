@@ -30,7 +30,7 @@ public class GenTreeSrc
 			final GenTreeSrcLexer lexer = new GenTreeSrcLexer(CharStreams.fromFileName(descriptionFile));
 			final GenTreeSrcParser parser = new GenTreeSrcParser(new CommonTokenStream(lexer));
 
-			final DefinitionFile definitionFile = DefinitionFile.of(new ArrayList<>());
+			final DefinitionFile definitionFile = DefinitionFile.of(new ArrayList<>(), new ArrayList<>());
 
 			ParseTreeWalker.DEFAULT.walk(new ASTListener(definitionFile), parser.main());
 
