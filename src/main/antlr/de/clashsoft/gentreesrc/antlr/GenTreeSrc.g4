@@ -40,7 +40,7 @@ packageName: (IDENTIFIER '.')*;
 // =============== Lexer ===============
 
 IDENTIFIER: [a-zA-Z_][a-zA-Z0-9]*;
-LINE_COMMENT: '//' .*? '\n';
-BLOCK_COMMENT: '/*' .*? '*/';
+LINE_COMMENT: '//' .*? '\n' -> skip;
+BLOCK_COMMENT: '/*' .*? '*/' -> skip;
 COMMENT: LINE_COMMENT | BLOCK_COMMENT;
 WS: [ \r\t\n] -> skip;
