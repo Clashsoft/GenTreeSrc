@@ -12,7 +12,7 @@ public <className>(<parameters>)
 >>
 
 acceptMethod(className, superClass) ::= <<
-public \<P, R> R accept(<superClass>.Visitor\<P, R> visitor, P par);
+\<P, R> R accept(<superClass>.Visitor\<P, R> visitor, P par);
 
 >>
 
