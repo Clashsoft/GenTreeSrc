@@ -78,10 +78,8 @@ public class Templates
 	}
 
 	// @formatter:off
-	public static String property(String name, String type) { return property("property", name, type); }
 	public static String getter(String name, String type) { return property("getter", name, type); }
 	public static String setter(String name, String type) { return property("setter", name, type); }
-	public static String propertyImpl(String name, String type) { return property("propertyImpl", name, type); }
 	public static String field(String name, String type) { return property("field", name, type); }
 	public static String getterImpl(String name, String type) { return property("getterImpl", name, type); }
 	public static String setterImpl(String name, String type) { return property("setterImpl", name, type); }
