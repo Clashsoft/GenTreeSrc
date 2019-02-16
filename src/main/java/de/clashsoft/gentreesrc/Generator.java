@@ -11,10 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
 
@@ -22,20 +19,24 @@ public class Generator
 {
 	public static void generate(DefinitionFile definitionFile, String targetDirectory) throws IOException
 	{
+		Map<String, String> importMap = new HashMap<>();
+		ImportHelper.collectImportMap(definitionFile, importMap);
+
 		for (TypeDeclaration decl : definitionFile.getDeclarations())
 		{
-			generate(decl, targetDirectory);
+			generate(importMap, decl, targetDirectory);
 		}
 	}
 
-	private static void generate(TypeDeclaration decl, String targetDirectory) throws IOException
+	private static void generate(Map<String, String> importMap, TypeDeclaration decl, String targetDirectory)
+		throws IOException
 	{
 		for (TypeDeclaration subDecl : decl.getSubTypes())
 		{
-			generate(subDecl, targetDirectory);
+			generate(importMap, subDecl, targetDirectory);
 		}
 
-		final String content = generate(decl);
+		final String content = generate(importMap, decl);
 
 		final String fileName =
 			targetDirectory + '/' + decl.getPackageName().replace('.', '/') + '/' + decl.getClassName() + ".java";
@@ -44,7 +45,7 @@ public class Generator
 		Files.write(path, content.getBytes(StandardCharsets.UTF_8));
 	}
 
-	private static String generate(TypeDeclaration decl)
+	private static String generate(Map<String, String> importMap, TypeDeclaration decl)
 	{
 		StringBuilder classBody = new StringBuilder();
 		StringBuilder implClassBody = new StringBuilder();
@@ -88,7 +89,7 @@ public class Generator
 
 		final String packageName = decl.getPackageName();
 		Set<String> imports = new TreeSet<>();
-		ImportHelper.collectImports(decl, imports);
+		ImportHelper.collectImports(importMap, decl, imports);
 		final String importText = imports.stream().map(Templates::importDeclaration).collect(Collectors.joining());
 
 		// generate main class
