@@ -1,9 +1,6 @@
 package de.clashsoft.gentreesrc.util;
 
-import de.clashsoft.gentreesrc.tree.DefinitionFile;
-import de.clashsoft.gentreesrc.tree.Property;
-import de.clashsoft.gentreesrc.tree.PropertyStyle;
-import de.clashsoft.gentreesrc.tree.TypeDeclaration;
+import de.clashsoft.gentreesrc.tree.*;
 
 import java.util.Map;
 import java.util.Set;
@@ -14,6 +11,11 @@ public class ImportHelper
 
 	public static void collectImportMap(DefinitionFile definitionFile, Map<String, String> importMap)
 	{
+		for (Import import_ : definitionFile.getImports())
+		{
+			importMap.put(import_.getTypeName(), import_.getPackageName());
+		}
+
 		for (TypeDeclaration decl : definitionFile.getDeclarations())
 		{
 			collectImportMap(decl, importMap);

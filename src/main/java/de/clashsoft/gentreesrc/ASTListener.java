@@ -2,10 +2,7 @@ package de.clashsoft.gentreesrc;
 
 import de.clashsoft.gentreesrc.antlr.GenTreeSrcBaseListener;
 import de.clashsoft.gentreesrc.antlr.GenTreeSrcParser;
-import de.clashsoft.gentreesrc.tree.DefinitionFile;
-import de.clashsoft.gentreesrc.tree.Property;
-import de.clashsoft.gentreesrc.tree.PropertyStyle;
-import de.clashsoft.gentreesrc.tree.TypeDeclaration;
+import de.clashsoft.gentreesrc.tree.*;
 
 import java.util.ArrayList;
 
@@ -27,12 +24,20 @@ public class ASTListener extends GenTreeSrcBaseListener
 	// =============== Methods ===============
 
 	@Override
+	public void enterImportDeclaration(GenTreeSrcParser.ImportDeclarationContext ctx)
+	{
+		final String packageName = getPackageName(ctx.packageName());
+		final String typeName = ctx.typeName.getText();
+
+		final Import import_ = Import.of(packageName, typeName);
+
+		this.definitionFile.getImports().add(import_);
+	}
+
+	@Override
 	public void enterTypeDeclaration(GenTreeSrcParser.TypeDeclarationContext ctx)
 	{
-		final String packageText = ctx.packageName().getText();
-		final String packageName = packageText.isEmpty() ?
-			                           packageText :
-			                           packageText.substring(0, packageText.length() - 1); // strip trailing period
+		final String packageName = getPackageName(ctx.packageName());
 		final String className = ctx.className.getText();
 
 		TypeDeclaration parent = this.currentDeclaration;
@@ -49,6 +54,13 @@ public class ASTListener extends GenTreeSrcBaseListener
 		{
 			this.definitionFile.getDeclarations().add(this.currentDeclaration);
 		}
+	}
+
+	private static String getPackageName(GenTreeSrcParser.PackageNameContext ctx)
+	{
+		final String packageText = ctx.getText();
+		// strip trailing period
+		return packageText.isEmpty() ? packageText : packageText.substring(0, packageText.length() - 1);
 	}
 
 	private static String getPackageName(TypeDeclaration parent, String child)
