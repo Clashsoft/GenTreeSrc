@@ -11,6 +11,7 @@ public class Templates
 
 	private static final STGroup classesGroup    = group("classes");
 	private static final STGroup commentsGroup   = group("comments");
+	private static final STGroup methodsGroup   = group("methods");
 	private static final STGroup propertiesGroup = group("properties");
 
 	// =============== Static Methods ===============
@@ -67,6 +68,26 @@ public class Templates
 	public static String subsectionComment(String text) { return comment("subsectionComment", text); }
 	// @formatter:on
 
+	// --------------- Methods ---------------
+
+	public static String ofMethod(String className, String parameters, String arguments)
+	{
+		final ST template = methodsGroup.getInstanceOf("ofMethod");
+		template.add("className", className);
+		template.add("parameters", parameters);
+		template.add("arguments", arguments);
+		return template.render();
+	}
+
+	public static String constructor(String className, String parameters, String body)
+	{
+		final ST template = methodsGroup.getInstanceOf("constructor");
+		template.add("className", className);
+		template.add("parameters", parameters);
+		template.add("body", body);
+		return template.render();
+	}
+
 	// --------------- Properties ---------------
 
 	private static String property(String templateName, String name, String type)
@@ -81,6 +102,8 @@ public class Templates
 	public static String getter(String name, String type) { return property("getter", name, type); }
 	public static String setter(String name, String type) { return property("setter", name, type); }
 	public static String field(String name, String type) { return property("field", name, type); }
+	public static String parameter(String name, String type) { return property("parameter", name, type); }
+	public static String setThis(String name, String type) { return property("setThis", name, type); }
 	public static String getterImpl(String name, String type) { return property("getterImpl", name, type); }
 	public static String setterImpl(String name, String type) { return property("setterImpl", name, type); }
 	// @formatter:on

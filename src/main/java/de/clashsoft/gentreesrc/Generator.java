@@ -11,7 +11,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
 
 public class Generator
@@ -46,6 +48,8 @@ public class Generator
 		StringBuilder classBody = new StringBuilder();
 		StringBuilder implClassBody = new StringBuilder();
 
+		generateOfMethod(decl, classBody);
+
 		if (!decl.getProperties().isEmpty())
 		{
 			if (decl.getProperties().stream().anyMatch(p -> p.getStyle() == PropertyStyle.LIST))
@@ -56,6 +60,7 @@ public class Generator
 
 			generateProperties(decl, classBody);
 			generateImplFields(decl, implClassBody);
+			generateImplConstructor(decl, implClassBody);
 			generateImplProperties(decl, implClassBody);
 		}
 
@@ -66,13 +71,29 @@ public class Generator
 		final String importText = imports.stream().map(Templates::importDeclaration).collect(Collectors.joining());
 
 		final String className = decl.getClassName();
-		final String superClass = decl.getSuperType() != null ? decl.getSuperType().getClassName() : "";
+		final String superClass = decl.getSuperType() != null ? decl.getSuperType().getClassName() : null;
 
 		final String implClass = Templates.treeImplClass(className, superClass, implClassBody.toString());
 		classBody.append(Templates.sectionComment("Classes"));
 		classBody.append(implClass);
 
 		return Templates.treeInterface(packageName, importText, className, superClass, classBody.toString());
+	}
+
+	private static String joinProperties(List<Property> properties, BinaryOperator<String> operator, String separator)
+	{
+		return properties.stream().map(p -> operator.apply(p.getName(), p.getType()))
+		                 .collect(Collectors.joining(separator));
+	}
+
+	private static void generateOfMethod(TypeDeclaration decl, StringBuilder classBody)
+	{
+		classBody.append(Templates.sectionComment("Static Methods"));
+
+		final String parameters = joinProperties(decl.getProperties(), Templates::parameter, ", ");
+		final String arguments = decl.getProperties().stream().map(Property::getName).collect(Collectors.joining(", "));
+
+		classBody.append(Templates.ofMethod(decl.getClassName(), parameters, arguments));
 	}
 
 	private static void generateProperties(TypeDeclaration decl, StringBuilder classBody)
@@ -88,6 +109,19 @@ public class Generator
 				classBody.append(Templates.setter(property.getName(), property.getType()));
 			}
 		}
+	}
+
+	private static void generateImplConstructor(TypeDeclaration decl, StringBuilder implClassBody)
+	{
+		implClassBody.append(Templates.sectionComment("Constructors"));
+
+		// no-arg constructor
+		implClassBody.append(Templates.constructor("Impl", "", ""));
+
+		final String parameters = joinProperties(decl.getProperties(), Templates::parameter, ", ");
+		final String body = joinProperties(decl.getProperties(), Templates::setThis, "\n");
+
+		implClassBody.append(Templates.constructor("Impl", parameters, body));
 	}
 
 	private static void generateImplFields(TypeDeclaration decl, StringBuilder implClassBody)

@@ -13,6 +13,10 @@ private <type> <name>;
 
 >>
 
+parameter(name, type) ::= <%
+<type> <name>
+%>
+
 getterImpl(name, type) ::= <<
 @Override public <type> get<name; format="cap">() { return this.<name>; }
 

@@ -1,9 +1,13 @@
 ofMethod(className, parameters, arguments) ::= <<
-static <className> of(<parameters>)
-{
-	return new <className>Impl(<arguments>);
-}
+static <className> of(<parameters>) { return new Impl(<arguments>); }
 
+>>
+
+constructor(className, parameters, body) ::= <<
+public <className>(<parameters>)
+{
+	<body>
+}
 
 >>
 

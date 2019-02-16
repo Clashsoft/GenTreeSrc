@@ -12,11 +12,13 @@ public interface <className><if(superClass)> extends <superClass><endif>
 {
 	<classBody>
 }
+
 >>
 
 treeImplClass(className, superClass, implClassBody) ::= <<
-class <className>Impl extends <superClass>Impl implements <className>
+class Impl<if(superClass)> extends <superClass>.Impl<endif> implements <className>
 {
 	<implClassBody>
 }
+
 >>
