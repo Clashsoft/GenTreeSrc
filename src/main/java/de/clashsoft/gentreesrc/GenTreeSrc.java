@@ -2,11 +2,13 @@ package de.clashsoft.gentreesrc;
 
 import de.clashsoft.gentreesrc.antlr.GenTreeSrcLexer;
 import de.clashsoft.gentreesrc.antlr.GenTreeSrcParser;
+import de.clashsoft.gentreesrc.tree.DefinitionFile;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class GenTreeSrc
 {
@@ -28,9 +30,11 @@ public class GenTreeSrc
 			final GenTreeSrcLexer lexer = new GenTreeSrcLexer(CharStreams.fromFileName(descriptionFile));
 			final GenTreeSrcParser parser = new GenTreeSrcParser(new CommonTokenStream(lexer));
 
-			final GenTreeSrcListener listener = new GenTreeSrcListener(descriptionFile, targetDirectory);
+			final DefinitionFile definitionFile = DefinitionFile.of(new ArrayList<>());
 
-			ParseTreeWalker.DEFAULT.walk(listener, parser.main());
+			ParseTreeWalker.DEFAULT.walk(new ASTListener(definitionFile), parser.main());
+
+			Generator.generate(definitionFile, targetDirectory);
 		}
 		catch (IOException e)
 		{
