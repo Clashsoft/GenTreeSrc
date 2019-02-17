@@ -1,0 +1,112 @@
+treeClass(typeDecl, imports) ::= <<
+package <typeDecl.packageName>;
+
+<imports:import_()>
+
+public interface <typeDecl.className><if(typeDecl.superType)> extends <typeDecl.superType.className><endif>
+{
+	// =============== Static Methods ===============
+	static <typeDecl.className> of(<typeDecl.properties:parameter(); separator=", ">) { return new Impl(<typeDecl.properties:argument(); separator=", ">); }
+	<if(typeDecl.properties)>
+	// =============== Properties ===============
+	<typeDecl.properties:getterSetter()><endif>
+	// =============== Methods ===============
+	\<P, R> R accept(<typeDecl.className>.Visitor\<P, R> visitor, P par);
+	// =============== Classes ===============
+	class Impl<if(typeDecl.superType)> extends <typeDecl.superType.className>.Impl<endif> implements <typeDecl.className>
+	{
+		<if(typeDecl.properties)>
+		// =============== Fields ===============
+		<typeDecl.properties:field()>
+		// =============== Constructors ===============
+		public Impl() {}
+		public Impl(<typeDecl.properties:parameter(); separator=", ">)
+		{
+			<typeDecl.properties:setThis(); separator="\n">
+		}
+		// =============== Properties ===============
+		<typeDecl.properties:getterSetterImpl()><endif>
+		// =============== Methods ===============
+		@Override public \<P, R> R accept(<typeDecl.className>.Visitor\<P, R> visitor, P par)
+		{
+			return visitor.visit<typeDecl.className>(this, par);
+		}
+	}
+	interface Visitor\<P, R><if(typeDecl.subTypes)> extends <typeDecl.subTypes:{s|<s.className>.Visitor\<P, R>}; separator=", "><endif>
+	{
+		// =============== Methods ===============
+		<visitMethod(typeDecl)>
+			<typeDecl.subTypes:recursiveSubVisits()>
+	}
+}
+
+>>
+
+// --------------- Helpers ---------------
+
+import_(qualified) ::= <<
+import <qualified>;
+
+>>
+
+visitMethod(typeDecl) ::= <%
+R visit<typeDecl.className>(<typeDecl.className> <typeDecl.className>, P par);
+%>
+
+recursiveSubVisits(typeDecl) ::= <<
+@Override <visitMethod(typeDecl)>
+	<typeDecl.subTypes:recursiveSubVisits()>
+>>
+
+// --------------- Properties ---------------
+
+parameter(property) ::= <%
+<property.type> <property.name>
+%>
+
+argument(property) ::= <%
+<property.name>
+%>
+
+field(property) ::= <<
+private <property.type> <property.name>;
+
+>>
+
+getterSetter(property) ::= <%
+<getter(property)>
+<if(property.style.setter)>
+<setter(property)>
+<endif>
+%>
+
+getter(property) ::= <<
+<property.type> get<property.name; format="cap">();
+
+>>
+
+setter(property) ::= <<
+void set<property.name; format="cap">(<property.type> <property.name>);
+
+>>
+
+setThis(property) ::= <%
+this.<property.name> = <property.name>;
+%>
+
+getterSetterImpl(property) ::= <%
+<getterImpl(property)>
+<if(property.style.setter)>
+<setterImpl(property)>
+<endif>
+%>
+
+getterImpl(property) ::= <<
+@Override public <property.type> get<property.name; format="cap">() { return this.<property.name>; }
+
+>>
+
+setterImpl(property) ::= <<
+@Override public void set<property.name; format="cap">(<parameter(property)>) { <setThis(property)> }
+
+>>

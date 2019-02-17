@@ -2,8 +2,14 @@ package de.clashsoft.gentreesrc.tree;
 
 public enum PropertyStyle
 {
-	REGULAR,
-	LIST,
+	REGULAR, LIST,
 	// OPTIONAL,
 	// VARARGS,
+
+	;
+
+	public boolean hasSetter()
+	{
+		return this == REGULAR;
+	}
 }
