@@ -23,12 +23,17 @@ propertyList:
 	'(' (property ','?)* ')';
 
 property:
-	name=IDENTIFIER ':' propertyType;
+	name=IDENTIFIER ':' propertyType
+	|
+	propertyType name=IDENTIFIER
+	;
 
 propertyType:
 	typeName=IDENTIFIER
 	|
 	'[' elementType=IDENTIFIER ']'
+	|
+	elementType=IDENTIFIER '[' ']'
 	/*
 	|
 	optionalType=IDENTIFIER '?'
