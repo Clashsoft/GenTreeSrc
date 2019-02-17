@@ -15,7 +15,6 @@ public interface Node
 		{
 			return visitor.visitNode(this, par);
 		}
-
 	}
 	interface Visitor<P, R> extends Import.Visitor<P, R>, DefinitionFile.Visitor<P, R>, Property.Visitor<P, R>, TypeDeclaration.Visitor<P, R>
 	{
@@ -27,5 +26,4 @@ public interface Node
 			@Override R visitTypeDeclaration(TypeDeclaration TypeDeclaration, P par);
 
 	}
-
 }

@@ -18,10 +18,9 @@ public interface DefinitionFile extends Node
 		// =============== Fields ===============
 		private List<Import> imports;
 		private List<TypeDeclaration> declarations;
+
 		// =============== Constructors ===============
-		public Impl()
-		{
-		}
+		public Impl() {}
 		public Impl(List<Import> imports, List<TypeDeclaration> declarations)
 		{
 			this.imports = imports;
@@ -35,13 +34,10 @@ public interface DefinitionFile extends Node
 		{
 			return visitor.visitDefinitionFile(this, par);
 		}
-
 	}
 	interface Visitor<P, R>
 	{
 		// =============== Methods ===============
 		R visitDefinitionFile(DefinitionFile DefinitionFile, P par);
-
 	}
-
 }

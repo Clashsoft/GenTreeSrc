@@ -27,10 +27,9 @@ public interface TypeDeclaration extends Node
 		private TypeDeclaration superType;
 		private List<Property> properties;
 		private List<TypeDeclaration> subTypes;
+
 		// =============== Constructors ===============
-		public Impl()
-		{
-		}
+		public Impl() {}
 		public Impl(String packageName, String className, TypeDeclaration superType, List<Property> properties, List<TypeDeclaration> subTypes)
 		{
 			this.packageName = packageName;
@@ -53,13 +52,10 @@ public interface TypeDeclaration extends Node
 		{
 			return visitor.visitTypeDeclaration(this, par);
 		}
-
 	}
 	interface Visitor<P, R>
 	{
 		// =============== Methods ===============
 		R visitTypeDeclaration(TypeDeclaration TypeDeclaration, P par);
-
 	}
-
 }

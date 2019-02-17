@@ -18,10 +18,9 @@ public interface Import extends Node
 		// =============== Fields ===============
 		private String packageName;
 		private String typeName;
+
 		// =============== Constructors ===============
-		public Impl()
-		{
-		}
+		public Impl() {}
 		public Impl(String packageName, String typeName)
 		{
 			this.packageName = packageName;
@@ -37,13 +36,10 @@ public interface Import extends Node
 		{
 			return visitor.visitImport(this, par);
 		}
-
 	}
 	interface Visitor<P, R>
 	{
 		// =============== Methods ===============
 		R visitImport(Import Import, P par);
-
 	}
-
 }

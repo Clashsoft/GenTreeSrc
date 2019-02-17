@@ -21,10 +21,9 @@ public interface Property extends Node
 		private String name;
 		private String type;
 		private PropertyStyle style;
+
 		// =============== Constructors ===============
-		public Impl()
-		{
-		}
+		public Impl() {}
 		public Impl(String name, String type, PropertyStyle style)
 		{
 			this.name = name;
@@ -43,13 +42,10 @@ public interface Property extends Node
 		{
 			return visitor.visitProperty(this, par);
 		}
-
 	}
 	interface Visitor<P, R>
 	{
 		// =============== Methods ===============
 		R visitProperty(Property Property, P par);
-
 	}
-
 }
