@@ -20,7 +20,7 @@ import java.util.TreeSet;
 
 public class Generator
 {
-	private static final STGroup treeGroup = new STGroupFile(Generator.class.getResource("templates/tree.stg"));
+	private static final STGroup treeGroup = new STGroupFile(Generator.class.getResource("templates/Java.stg"));
 
 	static
 	{
