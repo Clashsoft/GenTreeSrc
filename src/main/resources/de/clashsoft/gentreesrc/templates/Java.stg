@@ -64,8 +64,16 @@ recursiveSubVisits(typeDecl) ::= <<
 
 // --------------- Properties ---------------
 
+type(property) ::= <%
+<if(property.style.list)>
+List\<<property.type>>
+<else>
+<property.type>
+<endif>
+%>
+
 parameter(property) ::= <%
-<property.type> <property.name>
+<type(property)> <property.name>
 %>
 
 argument(property) ::= <%
@@ -73,7 +81,7 @@ argument(property) ::= <%
 %>
 
 field(property) ::= <<
-private <property.type> <property.name>;
+private <type(property)> <property.name>;
 
 >>
 
@@ -85,12 +93,12 @@ getterSetter(property) ::= <%
 %>
 
 getter(property) ::= <<
-<property.type> get<property.name; format="cap">();
+<type(property)> get<property.name; format="cap">();
 
 >>
 
 setter(property) ::= <<
-void set<property.name; format="cap">(<property.type> <property.name>);
+void set<property.name; format="cap">(<type(property)> <property.name>);
 
 >>
 
@@ -106,7 +114,7 @@ getterSetterImpl(property) ::= <%
 %>
 
 getterImpl(property) ::= <<
-@Override public <property.type> get<property.name; format="cap">() { return this.<property.name>; }
+@Override public <type(property)> get<property.name; format="cap">() { return this.<property.name>; }
 
 >>
 

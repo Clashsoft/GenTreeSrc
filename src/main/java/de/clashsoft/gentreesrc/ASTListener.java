@@ -85,9 +85,7 @@ public class ASTListener extends GenTreeSrcBaseListener
 		if (typeCtx.elementType != null)
 		{
 			final String elementType = typeCtx.elementType.getText();
-			final String listType = "List<" + elementType + ">";
-
-			final Property property = Property.of(name, listType, PropertyStyle.LIST);
+			final Property property = Property.of(name, elementType, PropertyStyle.LIST);
 			this.currentDeclaration.getProperties().add(property);
 		}
 		else

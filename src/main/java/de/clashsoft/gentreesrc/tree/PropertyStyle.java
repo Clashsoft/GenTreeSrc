@@ -8,6 +8,11 @@ public enum PropertyStyle
 
 	;
 
+	public boolean isList()
+	{
+		return this == LIST;
+	}
+
 	public boolean hasSetter()
 	{
 		return this == REGULAR;
