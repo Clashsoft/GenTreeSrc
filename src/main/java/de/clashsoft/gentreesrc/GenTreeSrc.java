@@ -34,7 +34,7 @@ public class GenTreeSrc
 
 			ParseTreeWalker.DEFAULT.walk(new ASTListener(definitionFile), parser.main());
 
-			Generator.generate(definitionFile, targetDirectory);
+			Generator.generate(definitionFile, targetDirectory, "Java");
 		}
 		catch (IOException e)
 		{

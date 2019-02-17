@@ -4,15 +4,12 @@ import de.clashsoft.gentreesrc.tree.DefinitionFile;
 import de.clashsoft.gentreesrc.tree.TypeDeclaration;
 import de.clashsoft.gentreesrc.util.GTSStringRenderer;
 import de.clashsoft.gentreesrc.util.ImportHelper;
+import org.stringtemplate.v4.AutoIndentWriter;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -20,53 +17,78 @@ import java.util.TreeSet;
 
 public class Generator
 {
-	private static final STGroup treeGroup = new STGroupFile(Generator.class.getResource("templates/Java.stg"));
+	// =============== Fields ===============
 
-	static
+	private final String targetDirectory;
+	private final Map<String, String> importMap;
+	private final STGroup treeGroup;
+
+	// =============== Constructors ===============
+
+	private Generator(String targetDirectory, Map<String, String> importMap, STGroup treeGroup)
 	{
-		treeGroup.registerRenderer(String.class, new GTSStringRenderer());
+		this.targetDirectory = targetDirectory;
+		this.importMap = importMap;
+		this.treeGroup = treeGroup;
 	}
 
-	public static void generate(DefinitionFile definitionFile, String targetDirectory) throws IOException
+	// =============== Static Methods ===============
+
+	public static void generate(DefinitionFile definitionFile, String targetDirectory, String language) throws IOException
 	{
-		Map<String, String> importMap = new HashMap<>();
+		// tree group
+
+		final STGroup treeGroup = new STGroupFile(Generator.class.getResource("templates/" + language + ".stg"));
+		treeGroup.registerRenderer(String.class, new GTSStringRenderer());
+
+		// import map
+
+		final Map<String, String> importMap = new HashMap<>();
 		ImportHelper.collectImportMap(definitionFile, importMap);
+
+		// generate
+
+		final Generator generator = new Generator(targetDirectory, importMap, treeGroup);
 
 		for (TypeDeclaration decl : definitionFile.getDeclarations())
 		{
-			generate(importMap, decl, targetDirectory);
+			generator.generate(decl);
 		}
 	}
 
-	private static void generate(Map<String, String> importMap, TypeDeclaration decl, String targetDirectory)
-		throws IOException
+	// =============== Methods ===============
+
+	private void generate(TypeDeclaration decl) throws IOException
 	{
 		for (TypeDeclaration subDecl : decl.getSubTypes())
 		{
-			generate(importMap, subDecl, targetDirectory);
+			this.generate(subDecl);
 		}
 
-		final String content = generate(importMap, decl);
-
-		final String fileName = treeGroup.getInstanceOf("fileName").add("typeDecl", decl).render();
-		final Path path = Paths.get(targetDirectory, fileName);
-
-		Files.createDirectories(path.getParent());
-		Files.write(path, content.getBytes(StandardCharsets.UTF_8));
-	}
-
-	private static String generate(Map<String, String> importMap, TypeDeclaration decl)
-	{
 		// imports
 
 		final Set<String> imports = new TreeSet<>();
-		ImportHelper.collectImports(importMap, decl, imports);
+		ImportHelper.collectImports(this.importMap, decl, imports);
 
-		// generate main class
+		// target file
 
-		final ST treeClass = treeGroup.getInstanceOf("treeClass");
+		final String fileName = this.treeGroup.getInstanceOf("fileName").add("typeDecl", decl).render();
+		final File file = new File(this.targetDirectory, fileName);
+
+		//noinspection ResultOfMethodCallIgnored
+		file.getParentFile().mkdirs();
+
+		// main class
+
+		final ST treeClass = this.treeGroup.getInstanceOf("treeClass");
 		treeClass.add("typeDecl", decl);
 		treeClass.add("imports", imports);
-		return treeClass.render();
+
+		try (Writer writer = new BufferedWriter(new FileWriter(file)))
+		{
+			// using write with a FileWriter is better than rendering to a String and then writing that,
+			// because it does not require materializing the entire text in memory
+			treeClass.write(new AutoIndentWriter(writer));
+		}
 	}
 }
