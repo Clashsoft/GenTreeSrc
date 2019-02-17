@@ -1,3 +1,7 @@
+fileName(typeDecl) ::= <%
+<typeDecl.packageName; format="s|\\.|/|">/<typeDecl.className>.java
+%>
+
 treeClass(typeDecl, imports) ::= <<
 package <typeDecl.packageName>;
 

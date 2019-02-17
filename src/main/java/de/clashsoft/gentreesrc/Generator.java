@@ -2,11 +2,11 @@ package de.clashsoft.gentreesrc;
 
 import de.clashsoft.gentreesrc.tree.DefinitionFile;
 import de.clashsoft.gentreesrc.tree.TypeDeclaration;
+import de.clashsoft.gentreesrc.util.GTSStringRenderer;
 import de.clashsoft.gentreesrc.util.ImportHelper;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
-import org.stringtemplate.v4.StringRenderer;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -24,7 +24,7 @@ public class Generator
 
 	static
 	{
-		treeGroup.registerRenderer(String.class, new StringRenderer());
+		treeGroup.registerRenderer(String.class, new GTSStringRenderer());
 	}
 
 	public static void generate(DefinitionFile definitionFile, String targetDirectory) throws IOException
@@ -48,9 +48,9 @@ public class Generator
 
 		final String content = generate(importMap, decl);
 
-		final String fileName =
-			targetDirectory + '/' + decl.getPackageName().replace('.', '/') + '/' + decl.getClassName() + ".java";
-		final Path path = Paths.get(fileName);
+		final String fileName = treeGroup.getInstanceOf("fileName").add("typeDecl", decl).render();
+		final Path path = Paths.get(targetDirectory, fileName);
+
 		Files.createDirectories(path.getParent());
 		Files.write(path, content.getBytes(StandardCharsets.UTF_8));
 	}
