@@ -11,11 +11,14 @@ public interface <typeDecl.className><if(typeDecl.superType)> extends <typeDecl.
 {
 	// =============== Static Methods ===============
 	static <typeDecl.className> of(<typeDecl.properties:parameter(); separator=", ">) { return new Impl(<typeDecl.properties:argument(); separator=", ">); }
+
 	<if(typeDecl.properties)>
 	// =============== Properties ===============
-	<typeDecl.properties:getterSetter()><endif>
+	<typeDecl.properties:getterSetter()>
+	<endif>
 	// =============== Methods ===============
 	\<P, R> R accept(<typeDecl.className>.Visitor\<P, R> visitor, P par);
+
 	// =============== Classes ===============
 	class Impl<if(typeDecl.superType)> extends <typeDecl.superType.className>.Impl<endif> implements <typeDecl.className>
 	{
@@ -28,19 +31,18 @@ public interface <typeDecl.className><if(typeDecl.superType)> extends <typeDecl.
 		{
 			<typeDecl.properties:setThis(); separator="\n">
 		}
+
 		// =============== Properties ===============
-		<typeDecl.properties:getterSetterImpl()><endif>
+		<typeDecl.properties:getterSetterImpl()>
+		<endif>
 		// =============== Methods ===============
-		@Override public \<P, R> R accept(<typeDecl.className>.Visitor\<P, R> visitor, P par)
-		{
-			return visitor.visit<typeDecl.className>(this, par);
-		}
+		<acceptImplRecursively(typeDecl, typeDecl)>
 	}
+
 	interface Visitor\<P, R><if(typeDecl.subTypes)> extends <typeDecl.subTypes:{s|<s.className>.Visitor\<P, R>}; separator=", "><endif>
 	{
 		// =============== Methods ===============
-		<visitMethod(typeDecl)>
-			<typeDecl.subTypes:recursiveSubVisits()>
+		R visit<typeDecl.className>(<typeDecl.className> <typeDecl.className>, P par);
 	}
 }
 
@@ -53,14 +55,15 @@ import <qualified>;
 
 >>
 
-visitMethod(typeDecl) ::= <%
-R visit<typeDecl.className>(<typeDecl.className> <typeDecl.className>, P par);
-%>
+acceptImpl(topDecl, typeDecl) ::= <<
+@Override public \<P, R> R accept(<typeDecl.className>.Visitor\<P, R> visitor, P par) { return visitor.visit<topDecl.className>(this, par); }
 
-recursiveSubVisits(typeDecl) ::= <<
-@Override <visitMethod(typeDecl)>
-	<typeDecl.subTypes:recursiveSubVisits()>
 >>
+
+acceptImplRecursively(topDecl, typeDecl) ::= <%
+<acceptImpl(topDecl, typeDecl)>
+<if(typeDecl.superType)><acceptImplRecursively(topDecl, typeDecl.superType)><endif>
+%>
 
 // --------------- Properties ---------------
 
