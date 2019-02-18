@@ -5,6 +5,7 @@ public interface Property extends Node
 {
 	// =============== Static Methods ===============
 	static Property of(String name, String type, PropertyStyle style) { return new Impl(name, type, style); }
+
 	// =============== Properties ===============
 	String getName();
 	void setName(String name);
@@ -12,8 +13,10 @@ public interface Property extends Node
 	void setType(String type);
 	PropertyStyle getStyle();
 	void setStyle(PropertyStyle style);
+
 	// =============== Methods ===============
 	<P, R> R accept(Property.Visitor<P, R> visitor, P par);
+
 	// =============== Classes ===============
 	class Impl extends Node.Impl implements Property
 	{
@@ -30,6 +33,7 @@ public interface Property extends Node
 			this.type = type;
 			this.style = style;
 		}
+
 		// =============== Properties ===============
 		@Override public String getName() { return this.name; }
 		@Override public void setName(String name) { this.name = name; }
@@ -37,12 +41,13 @@ public interface Property extends Node
 		@Override public void setType(String type) { this.type = type; }
 		@Override public PropertyStyle getStyle() { return this.style; }
 		@Override public void setStyle(PropertyStyle style) { this.style = style; }
+
 		// =============== Methods ===============
-		@Override public <P, R> R accept(Property.Visitor<P, R> visitor, P par)
-		{
-			return visitor.visitProperty(this, par);
-		}
+		@Override public <P, R> R accept(Property.Visitor<P, R> visitor, P par) { return visitor.visitProperty(this, par); }
+		@Override public <P, R> R accept(Node.Visitor<P, R> visitor, P par) { return visitor.visitProperty(this, par); }
+
 	}
+
 	interface Visitor<P, R>
 	{
 		// =============== Methods ===============

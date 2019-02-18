@@ -7,6 +7,7 @@ public interface TypeDeclaration extends Node
 {
 	// =============== Static Methods ===============
 	static TypeDeclaration of(String packageName, String className, TypeDeclaration superType, List<Property> properties, List<TypeDeclaration> subTypes) { return new Impl(packageName, className, superType, properties, subTypes); }
+
 	// =============== Properties ===============
 	String getPackageName();
 	void setPackageName(String packageName);
@@ -16,8 +17,10 @@ public interface TypeDeclaration extends Node
 	void setSuperType(TypeDeclaration superType);
 	List<Property> getProperties();
 	List<TypeDeclaration> getSubTypes();
+
 	// =============== Methods ===============
 	<P, R> R accept(TypeDeclaration.Visitor<P, R> visitor, P par);
+
 	// =============== Classes ===============
 	class Impl extends Node.Impl implements TypeDeclaration
 	{
@@ -38,6 +41,7 @@ public interface TypeDeclaration extends Node
 			this.properties = properties;
 			this.subTypes = subTypes;
 		}
+
 		// =============== Properties ===============
 		@Override public String getPackageName() { return this.packageName; }
 		@Override public void setPackageName(String packageName) { this.packageName = packageName; }
@@ -47,12 +51,13 @@ public interface TypeDeclaration extends Node
 		@Override public void setSuperType(TypeDeclaration superType) { this.superType = superType; }
 		@Override public List<Property> getProperties() { return this.properties; }
 		@Override public List<TypeDeclaration> getSubTypes() { return this.subTypes; }
+
 		// =============== Methods ===============
-		@Override public <P, R> R accept(TypeDeclaration.Visitor<P, R> visitor, P par)
-		{
-			return visitor.visitTypeDeclaration(this, par);
-		}
+		@Override public <P, R> R accept(TypeDeclaration.Visitor<P, R> visitor, P par) { return visitor.visitTypeDeclaration(this, par); }
+		@Override public <P, R> R accept(Node.Visitor<P, R> visitor, P par) { return visitor.visitTypeDeclaration(this, par); }
+
 	}
+
 	interface Visitor<P, R>
 	{
 		// =============== Methods ===============

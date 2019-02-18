@@ -7,11 +7,14 @@ public interface DefinitionFile extends Node
 {
 	// =============== Static Methods ===============
 	static DefinitionFile of(List<Import> imports, List<TypeDeclaration> declarations) { return new Impl(imports, declarations); }
+
 	// =============== Properties ===============
 	List<Import> getImports();
 	List<TypeDeclaration> getDeclarations();
+
 	// =============== Methods ===============
 	<P, R> R accept(DefinitionFile.Visitor<P, R> visitor, P par);
+
 	// =============== Classes ===============
 	class Impl extends Node.Impl implements DefinitionFile
 	{
@@ -26,15 +29,17 @@ public interface DefinitionFile extends Node
 			this.imports = imports;
 			this.declarations = declarations;
 		}
+
 		// =============== Properties ===============
 		@Override public List<Import> getImports() { return this.imports; }
 		@Override public List<TypeDeclaration> getDeclarations() { return this.declarations; }
+
 		// =============== Methods ===============
-		@Override public <P, R> R accept(DefinitionFile.Visitor<P, R> visitor, P par)
-		{
-			return visitor.visitDefinitionFile(this, par);
-		}
+		@Override public <P, R> R accept(DefinitionFile.Visitor<P, R> visitor, P par) { return visitor.visitDefinitionFile(this, par); }
+		@Override public <P, R> R accept(Node.Visitor<P, R> visitor, P par) { return visitor.visitDefinitionFile(this, par); }
+
 	}
+
 	interface Visitor<P, R>
 	{
 		// =============== Methods ===============
