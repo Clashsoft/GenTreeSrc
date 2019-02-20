@@ -41,9 +41,9 @@ public class ImportHelper
 			imports.add("java.util.List");
 		}
 
-		if (decl.getSuperType() != null)
+		for (TypeDeclaration superType = decl.getSuperType(); superType != null; superType = superType.getSuperType())
 		{
-			addImport(decl, imports, decl.getSuperType());
+			addImport(decl, imports, superType);
 		}
 
 		collectImportsRecursively(importMap, decl, imports, decl);
