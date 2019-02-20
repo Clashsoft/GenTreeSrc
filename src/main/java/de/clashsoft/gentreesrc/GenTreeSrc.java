@@ -16,14 +16,33 @@ public class GenTreeSrc
 	{
 		if (args.length < 2)
 		{
-			System.err.println("usage: gentreesrc <descriptionFile> <targetDirectory>");
+			printUsage();
 			return;
 		}
 
-		genTreeSrc(args[0], args[1]);
+		if (!"-l".equals(args[0]))
+		{
+			genTreeSrc(args[0], args[1], "Java");
+			return;
+		}
+
+		if (args.length < 4)
+		{
+			printUsage();
+			return;
+		}
+
+		genTreeSrc(args[2], args[3], args[1]);
+		return;
 	}
 
-	public static void genTreeSrc(String descriptionFile, String targetDirectory)
+	private static void printUsage()
+	{
+		System.err.println("usage: gentreesrc <descriptionFile> <targetDirectory>");
+		System.err.println("     | gentreesrc -l <language> <descriptionFile> <targetDirectory>");
+	}
+
+	public static void genTreeSrc(String descriptionFile, String targetDirectory, String language)
 	{
 		try
 		{
@@ -34,7 +53,7 @@ public class GenTreeSrc
 
 			ParseTreeWalker.DEFAULT.walk(new ASTListener(definitionFile), parser.main());
 
-			Generator.generate(definitionFile, targetDirectory, "Java");
+			Generator.generate(definitionFile, targetDirectory, language);
 		}
 		catch (IOException e)
 		{
