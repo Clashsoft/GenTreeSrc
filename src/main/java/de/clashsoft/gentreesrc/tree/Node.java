@@ -1,5 +1,7 @@
 package de.clashsoft.gentreesrc.tree;
 
+import de.clashsoft.gentreesrc.tree.type.Type;
+
 
 public interface Node
 {
@@ -17,7 +19,7 @@ public interface Node
 
 	}
 
-	interface Visitor<P, R> extends Import.Visitor<P, R>, DefinitionFile.Visitor<P, R>, Property.Visitor<P, R>, TypeDeclaration.Visitor<P, R>
+	interface Visitor<P, R> extends Import.Visitor<P, R>, DefinitionFile.Visitor<P, R>, Property.Visitor<P, R>, Type.Visitor<P, R>, TypeDeclaration.Visitor<P, R>
 	{
 		// =============== Methods ===============
 		R visitNode(Node Node, P par);

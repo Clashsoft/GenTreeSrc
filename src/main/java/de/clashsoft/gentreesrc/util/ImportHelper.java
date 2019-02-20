@@ -1,6 +1,12 @@
 package de.clashsoft.gentreesrc.util;
 
-import de.clashsoft.gentreesrc.tree.*;
+import de.clashsoft.gentreesrc.tree.DefinitionFile;
+import de.clashsoft.gentreesrc.tree.Import;
+import de.clashsoft.gentreesrc.tree.Property;
+import de.clashsoft.gentreesrc.tree.TypeDeclaration;
+import de.clashsoft.gentreesrc.tree.type.ListType;
+import de.clashsoft.gentreesrc.tree.type.NamedType;
+import de.clashsoft.gentreesrc.tree.type.Type;
 
 import java.util.Map;
 import java.util.Set;
@@ -36,11 +42,6 @@ public class ImportHelper
 
 	public static void collectImports(Map<String, String> importMap, TypeDeclaration decl, Set<String> imports)
 	{
-		if (decl.getProperties().stream().anyMatch(p -> p.getStyle() == PropertyStyle.LIST))
-		{
-			imports.add("java.util.List");
-		}
-
 		for (TypeDeclaration superType = decl.getSuperType(); superType != null; superType = superType.getSuperType())
 		{
 			addImport(decl, imports, superType);
@@ -63,6 +64,32 @@ public class ImportHelper
 		{
 			collectImportsRecursively(importMap, decl, imports, subType);
 		}
+	}
+
+	private static void addImport(Map<String, String> importMap, TypeDeclaration decl, Set<String> imports, Type type)
+	{
+		type.accept(new Type.Visitor<Void, Void>()
+		{
+			@Override
+			public Void visitType(Type type, Void par)
+			{
+				return null;
+			}
+
+			@Override
+			public Void visitNamedType(NamedType namedType, Void par)
+			{
+				addImport(importMap, decl, imports, namedType.getName());
+				return null;
+			}
+
+			@Override
+			public Void visitListType(ListType listType, Void par)
+			{
+				imports.add("java.util.List");
+				return listType.accept(this, par);
+			}
+		}, null);
 	}
 
 	private static void addImport(Map<String, String> importMap, TypeDeclaration decl, Set<String> imports,

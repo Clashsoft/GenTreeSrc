@@ -11,7 +11,12 @@ de.clashsoft.gentreesrc.tree.Node {
 	<declarations\n...>
 	```*/
 
-	Property(name: String, type: String, style: PropertyStyle)
+	Property(name: String, type: Type)
+
+	type.Type {
+		NamedType(name: String)
+		ListType(elementType: Type)
+	}
 
 	TypeDeclaration(
 		packageName: String

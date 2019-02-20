@@ -3,6 +3,9 @@ package de.clashsoft.gentreesrc;
 import de.clashsoft.gentreesrc.antlr.GenTreeSrcBaseListener;
 import de.clashsoft.gentreesrc.antlr.GenTreeSrcParser;
 import de.clashsoft.gentreesrc.tree.*;
+import de.clashsoft.gentreesrc.tree.type.ListType;
+import de.clashsoft.gentreesrc.tree.type.NamedType;
+import de.clashsoft.gentreesrc.tree.type.Type;
 
 import java.util.ArrayList;
 
@@ -13,6 +16,8 @@ public class ASTListener extends GenTreeSrcBaseListener
 	private DefinitionFile definitionFile;
 
 	private TypeDeclaration currentDeclaration;
+
+	private Type type;
 
 	// =============== Constructors ===============
 
@@ -76,24 +81,29 @@ public class ASTListener extends GenTreeSrcBaseListener
 		return parent.getPackageName() + '.' + child;
 	}
 
+	// --------------- Properties ---------------
+
 	@Override
-	public void enterProperty(GenTreeSrcParser.PropertyContext ctx)
+	public void exitProperty(GenTreeSrcParser.PropertyContext ctx)
 	{
 		final String name = ctx.name.getText();
-		final GenTreeSrcParser.PropertyTypeContext typeCtx = ctx.propertyType();
+		final Property property = Property.of(name, this.type);
+		this.currentDeclaration.getProperties().add(property);
+	}
 
-		if (typeCtx.elementType != null)
-		{
-			final String elementType = typeCtx.elementType.getText();
-			final Property property = Property.of(name, elementType, PropertyStyle.LIST);
-			this.currentDeclaration.getProperties().add(property);
-		}
-		else
-		{
-			final String type = typeCtx.typeName.getText();
-			final Property property = Property.of(name, type, PropertyStyle.REGULAR);
-			this.currentDeclaration.getProperties().add(property);
-		}
+	// --------------- Types ---------------
+
+	@Override
+	public void exitNamedType(GenTreeSrcParser.NamedTypeContext ctx)
+	{
+		final String name = ctx.name.getText();
+		this.type = NamedType.of(name);
+	}
+
+	@Override
+	public void exitListType(GenTreeSrcParser.ListTypeContext ctx)
+	{
+		this.type = ListType.of(this.type);
 	}
 
 	@Override

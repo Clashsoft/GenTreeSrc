@@ -65,18 +65,28 @@ acceptImplRecursively(topDecl, typeDecl) ::= <%
 <if(typeDecl.superType)><acceptImplRecursively(topDecl, typeDecl.superType)><endif>
 %>
 
-// --------------- Properties ---------------
+// --------------- Types ---------------
 
-type(property) ::= <%
-<if(property.style.list)>
-List\<<property.type>>
-<else>
-<property.type>
-<endif>
+type(type) ::= <%
+<(typeTemplate(type))(type)>
 %>
 
+typeTemplate(type) ::= <%
+type_<type.class.enclosingClass.simpleName>
+%>
+
+type_NamedType(type) ::= <%
+<type.name>
+%>
+
+type_ListType(type) ::= <%
+List\<<type(type.elementType)>>
+%>
+
+// --------------- Properties ---------------
+
 parameter(property) ::= <%
-<type(property)> <property.name>
+<type(property.type)> <property.name>
 %>
 
 argument(property) ::= <%
@@ -84,7 +94,7 @@ argument(property) ::= <%
 %>
 
 field(property) ::= <<
-private <type(property)> <property.name>;
+private <type(property.type)> <property.name>;
 
 >>
 
@@ -96,12 +106,12 @@ getterSetter(property) ::= <%
 %>
 
 getter(property) ::= <<
-<type(property)> get<property.name; format="cap">();
+<type(property.type)> get<property.name; format="cap">();
 
 >>
 
 setter(property) ::= <<
-void set<property.name; format="cap">(<type(property)> <property.name>);
+void set<property.name; format="cap">(<type(property.type)> <property.name>);
 
 >>
 
@@ -117,7 +127,7 @@ getterSetterImpl(property) ::= <%
 %>
 
 getterImpl(property) ::= <<
-@Override public <type(property)> get<property.name; format="cap">() { return this.<property.name>; }
+@Override public <type(property.type)> get<property.name; format="cap">() { return this.<property.name>; }
 
 >>
 
