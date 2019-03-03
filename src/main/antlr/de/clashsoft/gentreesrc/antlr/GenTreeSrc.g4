@@ -37,6 +37,12 @@ property:
 // --------------- Types ---------------
 
 type:
+	nonOptionalType
+	|
+	optionalType
+	;
+
+nonOptionalType:
 	namedType
 	|
 	listType
@@ -44,6 +50,7 @@ type:
 
 namedType: name=IDENTIFIER;
 listType: '[' elementType=type ']';
+optionalType: nonOptionalType '?';
 
 packageName: (IDENTIFIER '.')*;
 

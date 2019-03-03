@@ -5,6 +5,7 @@ import de.clashsoft.gentreesrc.antlr.GenTreeSrcParser;
 import de.clashsoft.gentreesrc.tree.*;
 import de.clashsoft.gentreesrc.tree.type.ListType;
 import de.clashsoft.gentreesrc.tree.type.NamedType;
+import de.clashsoft.gentreesrc.tree.type.OptionalType;
 import de.clashsoft.gentreesrc.tree.type.Type;
 
 import java.util.ArrayList;
@@ -104,6 +105,12 @@ public class ASTListener extends GenTreeSrcBaseListener
 	public void exitListType(GenTreeSrcParser.ListTypeContext ctx)
 	{
 		this.type = ListType.of(this.type);
+	}
+
+	@Override
+	public void exitOptionalType(GenTreeSrcParser.OptionalTypeContext ctx)
+	{
+		this.type = OptionalType.of(this.type);
 	}
 
 	@Override
