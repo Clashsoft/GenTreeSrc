@@ -16,6 +16,7 @@ de.clashsoft.gentreesrc.tree.Node {
 	type.Type {
 		NamedType(name: String)
 		ListType(elementType: Type)
+		OptionalType(wrappedType: Type)
 	}
 
 	TypeDeclaration(

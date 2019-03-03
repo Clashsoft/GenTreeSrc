@@ -20,7 +20,7 @@ public interface Type extends Node
 
 	}
 
-	interface Visitor<P, R> extends NamedType.Visitor<P, R>, ListType.Visitor<P, R>
+	interface Visitor<P, R> extends NamedType.Visitor<P, R>, ListType.Visitor<P, R>, OptionalType.Visitor<P, R>
 	{
 		// =============== Methods ===============
 		R visitType(Type Type, P par);

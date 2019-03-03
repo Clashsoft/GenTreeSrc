@@ -6,6 +6,7 @@ import de.clashsoft.gentreesrc.tree.Property;
 import de.clashsoft.gentreesrc.tree.TypeDeclaration;
 import de.clashsoft.gentreesrc.tree.type.ListType;
 import de.clashsoft.gentreesrc.tree.type.NamedType;
+import de.clashsoft.gentreesrc.tree.type.OptionalType;
 import de.clashsoft.gentreesrc.tree.type.Type;
 
 import java.util.Map;
@@ -88,6 +89,12 @@ public class ImportHelper
 			{
 				imports.add("java.util.List");
 				return listType.getElementType().accept(this, par);
+			}
+
+			@Override
+			public Void visitOptionalType(OptionalType optionalType, Void par)
+			{
+				return optionalType.getWrappedType().accept(this, par);
 			}
 		}, null);
 	}
