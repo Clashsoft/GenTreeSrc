@@ -1,5 +1,8 @@
 package de.clashsoft.gentreesrc.tree;
 
+import de.clashsoft.gentreesrc.tree.type.ListType;
+import de.clashsoft.gentreesrc.tree.type.NamedType;
+import de.clashsoft.gentreesrc.tree.type.OptionalType;
 import de.clashsoft.gentreesrc.tree.type.Type;
 
 

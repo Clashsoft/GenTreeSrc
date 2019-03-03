@@ -16,7 +16,9 @@ public interface TypeDeclaration extends Node
 	TypeDeclaration getSuperType();
 	void setSuperType(TypeDeclaration superType);
 	List<Property> getProperties();
+	void setProperties(List<Property> properties);
 	List<TypeDeclaration> getSubTypes();
+	void setSubTypes(List<TypeDeclaration> subTypes);
 
 	// =============== Methods ===============
 	<P, R> R accept(TypeDeclaration.Visitor<P, R> visitor, P par);
@@ -50,7 +52,9 @@ public interface TypeDeclaration extends Node
 		@Override public TypeDeclaration getSuperType() { return this.superType; }
 		@Override public void setSuperType(TypeDeclaration superType) { this.superType = superType; }
 		@Override public List<Property> getProperties() { return this.properties; }
+		@Override public void setProperties(List<Property> properties) { this.properties = properties; }
 		@Override public List<TypeDeclaration> getSubTypes() { return this.subTypes; }
+		@Override public void setSubTypes(List<TypeDeclaration> subTypes) { this.subTypes = subTypes; }
 
 		// =============== Methods ===============
 		@Override public <P, R> R accept(TypeDeclaration.Visitor<P, R> visitor, P par) { return visitor.visitTypeDeclaration(this, par); }
