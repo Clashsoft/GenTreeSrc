@@ -87,7 +87,7 @@ public class ImportHelper
 			public Void visitListType(ListType listType, Void par)
 			{
 				imports.add("java.util.List");
-				return listType.accept(this, par);
+				return listType.getElementType().accept(this, par);
 			}
 		}, null);
 	}
