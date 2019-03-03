@@ -100,9 +100,7 @@ private <type(property.type)> <property.name>;
 
 getterSetter(property) ::= <%
 <getter(property)>
-<if(property.style.setter)>
 <setter(property)>
-<endif>
 %>
 
 getter(property) ::= <<
@@ -121,9 +119,7 @@ this.<property.name> = <property.name>;
 
 getterSetterImpl(property) ::= <%
 <getterImpl(property)>
-<if(property.style.setter)>
 <setterImpl(property)>
-<endif>
 %>
 
 getterImpl(property) ::= <<
