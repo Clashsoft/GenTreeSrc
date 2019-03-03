@@ -83,6 +83,10 @@ type_ListType(type) ::= <%
 List\<<type(type.elementType)>>
 %>
 
+type_OptionalType(type) ::= <%
+<type(type.wrappedType)>
+%>
+
 // --------------- Properties ---------------
 
 parameter(property) ::= <%
