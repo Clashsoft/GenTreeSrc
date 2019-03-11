@@ -1,6 +1,8 @@
 plugins {
-    id 'java'
-    id 'antlr'
+	id 'java'
+	id 'antlr'
+	id 'com.jfrog.bintray' version '1.8.4'
+	id 'maven-publish'
 }
 
 group 'de.clashsoft'
@@ -33,3 +35,88 @@ dependencies {
 }
 
 sourceSets.main.java.srcDir("$buildDir/generated-src/antlr/main/")
+
+task sourcesJar(type: Jar) {
+	from sourceSets.main.allSource
+	classifier = 'sources'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+	classifier = 'javadoc'
+	from javadoc.destinationDir
+}
+
+def pomConfig = {
+	licenses {
+		license {
+			name 'BSD 3-Clause "New" or "Revised" License'
+			url 'https://opensource.org/licenses/BSD-3-Clause'
+		}
+	}
+
+	developers {
+		developer {
+			id 'Clashsoft'
+			name 'Adrian Kunz'
+			email 'clashsoft@hotmail.com'
+		}
+	}
+
+	scm {
+		url project.vcsUrl
+	}
+}
+
+publishing {
+	publications {
+		GenTreeSrc(MavenPublication) {
+			from components.java
+			artifact sourcesJar
+			artifact javadocJar
+			groupId project.group
+			artifactId project.name
+			version project.version
+
+			pom.withXml {
+				def root = asNode()
+				root.appendNode('description', project.description)
+				root.appendNode('name', project.niceName)
+				root.appendNode('url', project.websiteUrl)
+				root.children().last() + pomConfig
+			}
+		}
+	}
+}
+
+bintray {
+	user = System.getenv('BINTRAY_USER')
+	key = System.getenv('BINTRAY_KEY')
+	publications = [ 'GenTreeSrc' ]
+	// publish = true
+	// override = true
+
+	pkg {
+		repo = 'maven'
+		name = project.name
+		// userOrg = ''
+		desc = project.description
+		websiteUrl = project.websiteUrl
+		issueTrackerUrl = project.issueTrackerUrl
+		vcsUrl = project.vcsUrl
+		licenses = [ 'BSD 3-Clause' ]
+		labels = project.labels
+		publicDownloadNumbers = true
+		// attributes = []
+
+		githubRepo = project.githubRepo
+		githubReleaseNotesFile = 'CHANGELOG.md'
+
+		version {
+			name = project.version
+			desc = "$project.name v$project.version"
+			released = new Date()
+			vcsTag = "v$project.version"
+			// attributes = []
+		}
+	}
+}
