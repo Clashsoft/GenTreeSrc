@@ -5,21 +5,31 @@ plugins {
 
 group 'de.clashsoft'
 version '0.1.0'
+description 'A tool that generates Tree and Visitor classes from an AST model description file.'
+
+project.ext {
+	niceName = 'GenTreeSrc'
+	websiteUrl = 'https://github.com/Clashsoft/gentreesrc'
+	issueTrackerUrl = 'https://github.com/Clashsoft/gentreesrc/issues'
+	vcsUrl = 'https://github.com/Clashsoft/gentreesrc'
+	githubRepo = 'Clashsoft/gentreesrc'
+	labels = [ 'source', 'generator', 'tree', 'ast' ]
+}
 
 sourceCompatibility = 1.8
 
 repositories {
-    mavenCentral()
+	mavenCentral()
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+	testCompile group: 'junit', name: 'junit', version: '4.12'
 
-    // use ANTLR version 4
-    antlr "org.antlr:antlr4:4.7"
+	// use ANTLR version 4
+	antlr "org.antlr:antlr4:4.7"
 
-    // https://mvnrepository.com/artifact/org.antlr/ST4
-    compile group: 'org.antlr', name: 'ST4', version: '4.1'
+	// https://mvnrepository.com/artifact/org.antlr/ST4
+	compile group: 'org.antlr', name: 'ST4', version: '4.1'
 }
 
 sourceSets.main.java.srcDir("$buildDir/generated-src/antlr/main/")
