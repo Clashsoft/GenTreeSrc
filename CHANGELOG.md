@@ -9,3 +9,5 @@
 + Added support for alternative property syntax. #9
 + Added support for optional types. #10
 + Added the `-l` command-line option.
+
+# GenTreeSrc v0.1.1
