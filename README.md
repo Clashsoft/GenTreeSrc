@@ -57,3 +57,16 @@ It is recommended to use `testCompile` instead of `compile` because GenTreeSrc i
       ```
 
 3. The generated tree files can be found in the `src/main/java/` directory.
+
+## Additional Notes
+
+If you prefer not to pollute your `src/` directory with generated sources, you can use a different target directory.
+This can be done by replacing `src/main/java/` in the examples above by a directory of your choice.
+
+We recommend using the directory `build/generated-src/gentreesrc/main/`.
+Add this line to your `build.gradle` script to mark it as a source directory
+(otherwise you can't use the generated classes):
+
+```groovy
+sourceSets.main.java.srcDir "$buildDir/generated-src/gentreesrc/main/"
+```
