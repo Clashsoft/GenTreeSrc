@@ -2,7 +2,7 @@ package de.clashsoft.gentreesrc;
 
 import java.io.IOException;
 
-public class GenTreeSrc
+public class Main
 {
 	public static void main(String[] args) throws IOException
 	{
