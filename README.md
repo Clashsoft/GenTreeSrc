@@ -35,7 +35,7 @@ It is recommended to use `testCompile` instead of `compile` because GenTreeSrc i
       Option              | Value
       --------------------|--------------------------------------------
       Classpath of Module | test
-      Main Class          | de.clashsoft.gentreesrc.GenTreeSrc
+      Main Class          | de.clashsoft.gentreesrc.Main
       Arguments           | src/test/gentreesrc/Tree.gts src/main/java/
 
    2. Using Gradle, by adding the following task definition to your `build.gradle` script:
@@ -43,7 +43,7 @@ It is recommended to use `testCompile` instead of `compile` because GenTreeSrc i
       ```groovy
       task genTreeSrc(type: JavaExec) {
           classpath = sourceSets.test.compileClasspath
-          main = 'de.clashsoft.gentreesrc.GenTreeSrc'
+          main = 'de.clashsoft.gentreesrc.Main'
           args = [ 'src/main/gentreesrc/Tree.gts', 'src/main/java/' ]
       }
       ```
