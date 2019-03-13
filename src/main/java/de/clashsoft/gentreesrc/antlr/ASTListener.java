@@ -1,8 +1,9 @@
-package de.clashsoft.gentreesrc;
+package de.clashsoft.gentreesrc.antlr;
 
-import de.clashsoft.gentreesrc.antlr.GenTreeSrcBaseListener;
-import de.clashsoft.gentreesrc.antlr.GenTreeSrcParser;
-import de.clashsoft.gentreesrc.tree.*;
+import de.clashsoft.gentreesrc.tree.DefinitionFile;
+import de.clashsoft.gentreesrc.tree.Import;
+import de.clashsoft.gentreesrc.tree.Property;
+import de.clashsoft.gentreesrc.tree.TypeDeclaration;
 import de.clashsoft.gentreesrc.tree.type.ListType;
 import de.clashsoft.gentreesrc.tree.type.NamedType;
 import de.clashsoft.gentreesrc.tree.type.OptionalType;
