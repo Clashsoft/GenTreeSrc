@@ -101,6 +101,7 @@ bintray {
 	user = System.getenv('BINTRAY_USER')
 	key = System.getenv('BINTRAY_KEY')
 	publications = [ 'GenTreeSrc' ]
+	// dryRun = true
 	// publish = true
 	// override = true
 
@@ -126,6 +127,11 @@ bintray {
 			released = new Date()
 			vcsTag = "v$project.version"
 			// attributes = []
+
+			gpg {
+				sign = true
+				passphrase = System.getenv('BINTRAY_GPG_PASSPHRASE')
+			}
 		}
 	}
 }
