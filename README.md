@@ -1,5 +1,8 @@
 # GenTreeSrc
 
+[![Build Status](https://travis-ci.org/Clashsoft/GenTreeSrc.svg?branch=master)](https://travis-ci.org/Clashsoft/GenTreeSrc)
+[![Download](https://api.bintray.com/packages/clashsoft/maven/gentreesrc/images/download.svg)](https://bintray.com/clashsoft/maven/gentreesrc/_latestVersion)
+
 A tool that generates Tree and Visitor classes from a description file.
 
 ## Installation
