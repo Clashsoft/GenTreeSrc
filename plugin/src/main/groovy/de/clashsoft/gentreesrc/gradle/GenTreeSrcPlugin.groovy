@@ -2,9 +2,8 @@ package de.clashsoft.gentreesrc.gradle
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.Task
 import org.gradle.api.artifacts.Configuration
-import org.gradle.api.plugins.JavaPluginConvention
+import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.tasks.JavaExec
 
 class GenTreeSrcPlugin implements Plugin<Project> {
@@ -29,16 +28,12 @@ class GenTreeSrcPlugin implements Plugin<Project> {
 			outputs.dir(outputDir)
 		}
 
-		JavaPluginConvention javaPluginConvention = project.convention.findPlugin(JavaPluginConvention)
-		if (javaPluginConvention != null) {
-			def sourceSets = javaPluginConvention.sourceSets
+		project.plugins.withType(JavaPlugin) {
+			// configure source directory
+			project.sourceSets.main.java.srcDir(project.files(outputDir).builtBy(taskName))
 
-			sourceSets.main.java.srcDir(project.files(outputDir).builtBy(taskName))
-		}
-
-		Task compileJava = project.tasks.findByName('compileJava')
-		if (compileJava != null) {
-			compileJava.dependsOn(taskName)
+			// configure compile dependency
+			project.tasks.compileJava.dependsOn(taskName)
 		}
 	}
 }
