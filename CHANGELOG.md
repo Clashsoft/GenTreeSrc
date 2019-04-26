@@ -25,3 +25,8 @@
 
 + Add a `javax.tools.Tool` implementation.
 * Updated command-line parsing with new `-o` option for output directory.
+
+# GenTreeSrc v0.3.1
+
+* The `--language` option value is now normalized to lowercase.
+* Renamed the `Java.stg` template to `java.stg`.
