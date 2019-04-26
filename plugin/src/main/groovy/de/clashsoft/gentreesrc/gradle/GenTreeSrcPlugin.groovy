@@ -2,6 +2,8 @@ package de.clashsoft.gentreesrc.gradle
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.plugins.JavaPluginConvention
+import org.gradle.api.tasks.JavaExec
 
 class GenTreeSrcPlugin implements Plugin<Project> {
 	@Override
@@ -15,17 +17,22 @@ class GenTreeSrcPlugin implements Plugin<Project> {
 		project.tasks.register(taskName, JavaExec) {
 			classpath = project.configurations.gentreesrc
 			main = 'de.clashsoft.gentreesrc.Main'
-			args = [ '-o', gentreeSrcDir, inputDir ]
+			args = [ '-o', outputDir, inputDir ]
 
 			inputs.dir(inputDir)
 			outputs.dir(outputDir)
 		}
 
-		if (project.sourceSets) {
-			project.sourceSets.main.java.srcDir(project.files(outputDir).builtBy(taskName))
+		def javaPluginConvention = project.convention.findPlugin(JavaPluginConvention)
+		if (javaPluginConvention != null) {
+			def sourceSets = javaPluginConvention.sourceSets
+
+			sourceSets.main.java.srcDir(project.files(outputDir).builtBy(taskName))
 		}
-		if (project.tasks.compileJava) {
-			project.tasks.compileJava.dependsOn(taskName)
+
+		def compileJava = project.tasks.findByName('compileJava')
+		if (compileJava != null) {
+			compileJava.dependsOn(taskName)
 		}
 	}
 }
