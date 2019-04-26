@@ -4,6 +4,9 @@ plugins {
 	id 'com.gradle.plugin-publish' version '0.10.1'
 }
 
+apply from: 'integration-test.gradle'
+apply from: 'functional-test.gradle'
+
 group 'de.clashsoft'
 version '0.1.0'
 description 'The GenTreeSrc Gradle Plugin.'
@@ -15,7 +18,7 @@ pluginBundle {
 	tags = [ 'generate', 'ast', 'gentreesrc' ]
 
 	plugins {
-		simplePublishPlugin {
+		gentreesrcPlugin {
 			displayName = 'GenTreeSrc'
 		}
 	}
@@ -29,7 +32,7 @@ pluginBundle {
 
 gradlePlugin {
 	plugins {
-		simplePublishPlugin {
+		gentreesrcPlugin {
 			id = 'de.clashsoft.gentreesrc-gradle'
 			implementationClass = 'de.clashsoft.gentreesrc.gradle.GenTreeSrcPlugin'
 		}
@@ -43,4 +46,8 @@ repositories {
 dependencies {
 	// https://mvnrepository.com/artifact/junit/junit
 	testCompile group: 'junit', name: 'junit', version: '4.12'
+
+	testCompile(group: 'org.spockframework', name: 'spock-core', version: '1.1-groovy-2.4') {
+		exclude group: 'org.codehaus.groovy'
+	}
 }
