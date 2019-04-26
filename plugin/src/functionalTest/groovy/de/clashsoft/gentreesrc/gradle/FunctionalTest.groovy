@@ -23,8 +23,7 @@ class FunctionalTest extends Specification {
 		}
 		
 		repositories {
-			mavenLocal()
-			mavenCentral()
+			jcenter()
 		}
 		
 		dependencies {
