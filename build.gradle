@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'de.clashsoft'
-version '0.2.0'
+version '0.3.0'
 description 'A tool that generates Tree and Visitor classes from an AST model description file.'
 
 publishInfo {
@@ -53,6 +53,9 @@ dependencies {
 
 	// https://mvnrepository.com/artifact/org.antlr/ST4
 	compile group: 'org.antlr', name: 'ST4', version: '4.1'
+
+	// https://mvnrepository.com/artifact/commons-cli/commons-cli
+	compile group: 'commons-cli', name: 'commons-cli', version: '1.4'
 }
 
 sourceSets.main.java.srcDir("$buildDir/generated-src/antlr/main/")
