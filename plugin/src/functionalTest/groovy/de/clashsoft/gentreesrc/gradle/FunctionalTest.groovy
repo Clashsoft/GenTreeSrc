@@ -45,7 +45,7 @@ class FunctionalTest extends Specification {
 		when:
 		def result = GradleRunner.create()
 				.withProjectDir(testProjectDir.root)
-				.withArguments('gentreesrc')
+				.withArguments('gentreesrcJava')
 				.withPluginClasspath()
 				.build()
 
@@ -58,7 +58,7 @@ class FunctionalTest extends Specification {
 		println "-" * 75
 
 		then:
-		result.task(":gentreesrc").outcome == SUCCESS
+		result.task(":gentreesrcJava").outcome == SUCCESS
 
 		def outputDir = new File(testProjectDir.root, "build/generated-src/gentreesrc/main/java/")
 		new File(outputDir, 'com/example/Foo.java').exists()

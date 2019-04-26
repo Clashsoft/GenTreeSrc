@@ -24,8 +24,8 @@ class GenTreeSrcPluginTest {
 		project.pluginManager.apply 'java'
 		project.pluginManager.apply 'de.clashsoft.gentreesrc-gradle'
 
-		assertThat(project.tasks.gentreesrc, instanceOf(JavaExec))
-		assertThat(project.tasks.compileJava.dependsOn, hasItem('gentreesrc'))
+		assertThat(project.tasks.gentreesrcJava, instanceOf(JavaExec))
+		assertThat(project.tasks.compileJava.dependsOn, hasItem('gentreesrcJava'))
 	}
 
 	@Test
@@ -36,6 +36,6 @@ class GenTreeSrcPluginTest {
 
 		def sourceSets = project.convention.getPlugin(JavaPluginConvention).sourceSets
 
-		assertThat(sourceSets.main.java.srcDirs, hasItem(new File("$project.buildDir/generated-src/gentreesrc/main/")))
+		assertThat(sourceSets.main.java.srcDirs, hasItem(new File("$project.buildDir/generated-src/gentreesrc/main/java/")))
 	}
 }
