@@ -2,20 +2,26 @@ package de.clashsoft.gentreesrc.gradle
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.Task
+import org.gradle.api.artifacts.Configuration
 import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.tasks.JavaExec
 
 class GenTreeSrcPlugin implements Plugin<Project> {
 	@Override
 	void apply(Project project) {
-		def taskName = 'gentreesrc'
-		def inputDir = 'src/main/gentreesrc/'
-		def outputDir = "$project.buildDir/generated-src/gentreesrc/main/"
+		String language = 'java'
+		String sourceSet = 'main'
 
-		project.configurations.create(taskName)
+		String configurationName = 'gentreesrc' + (sourceSet == 'main' ? '' : sourceSet.capitalize())
+		String taskName = configurationName + language.capitalize()
+		String inputDir = "src/$sourceSet/gentreesrc/"
+		String outputDir = "$project.buildDir/generated-src/gentreesrc/$sourceSet/$language"
+
+		Configuration configuration = project.configurations.create(configurationName)
 
 		project.tasks.register(taskName, JavaExec) {
-			classpath = project.configurations.gentreesrc
+			classpath = configuration
 			main = 'de.clashsoft.gentreesrc.Main'
 			args = [ '-o', outputDir, inputDir ]
 
@@ -23,14 +29,14 @@ class GenTreeSrcPlugin implements Plugin<Project> {
 			outputs.dir(outputDir)
 		}
 
-		def javaPluginConvention = project.convention.findPlugin(JavaPluginConvention)
+		JavaPluginConvention javaPluginConvention = project.convention.findPlugin(JavaPluginConvention)
 		if (javaPluginConvention != null) {
 			def sourceSets = javaPluginConvention.sourceSets
 
 			sourceSets.main.java.srcDir(project.files(outputDir).builtBy(taskName))
 		}
 
-		def compileJava = project.tasks.findByName('compileJava')
+		Task compileJava = project.tasks.findByName('compileJava')
 		if (compileJava != null) {
 			compileJava.dependsOn(taskName)
 		}
