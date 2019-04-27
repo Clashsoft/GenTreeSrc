@@ -1,9 +1,9 @@
 package de.clashsoft.gentreesrc.antlr;
 
 import de.clashsoft.gentreesrc.tree.DefinitionFile;
-import de.clashsoft.gentreesrc.tree.Import;
-import de.clashsoft.gentreesrc.tree.Property;
-import de.clashsoft.gentreesrc.tree.TypeDeclaration;
+import de.clashsoft.gentreesrc.tree.decl.ImportDecl;
+import de.clashsoft.gentreesrc.tree.decl.PropertyDecl;
+import de.clashsoft.gentreesrc.tree.decl.TypeDecl;
 import de.clashsoft.gentreesrc.tree.type.ListType;
 import de.clashsoft.gentreesrc.tree.type.NamedType;
 import de.clashsoft.gentreesrc.tree.type.OptionalType;
@@ -17,7 +17,7 @@ public class ASTListener extends GenTreeSrcBaseListener
 
 	private DefinitionFile definitionFile;
 
-	private TypeDeclaration currentDeclaration;
+	private TypeDecl currentDeclaration;
 
 	private Type type;
 
@@ -36,7 +36,7 @@ public class ASTListener extends GenTreeSrcBaseListener
 		final String packageName = getPackageName(ctx.packageName());
 		final String typeName = ctx.typeName.getText();
 
-		final Import import_ = Import.of(packageName, typeName);
+		final ImportDecl import_ = ImportDecl.of(packageName, typeName);
 
 		this.definitionFile.getImports().add(import_);
 	}
@@ -47,10 +47,10 @@ public class ASTListener extends GenTreeSrcBaseListener
 		final String packageName = getPackageName(ctx.packageName());
 		final String className = ctx.className.getText();
 
-		TypeDeclaration parent = this.currentDeclaration;
+		TypeDecl parent = this.currentDeclaration;
 		final String fullPackageName = getPackageName(parent, packageName);
 
-		this.currentDeclaration = TypeDeclaration
+		this.currentDeclaration = TypeDecl
 			                          .of(fullPackageName, className, parent, new ArrayList<>(), new ArrayList<>());
 
 		if (parent != null)
@@ -70,7 +70,7 @@ public class ASTListener extends GenTreeSrcBaseListener
 		return packageText.isEmpty() ? packageText : packageText.substring(0, packageText.length() - 1);
 	}
 
-	private static String getPackageName(TypeDeclaration parent, String child)
+	private static String getPackageName(TypeDecl parent, String child)
 	{
 		if (parent == null)
 		{
@@ -89,7 +89,7 @@ public class ASTListener extends GenTreeSrcBaseListener
 	public void exitProperty(GenTreeSrcParser.PropertyContext ctx)
 	{
 		final String name = ctx.name.getText();
-		final Property property = Property.of(name, this.type);
+		final PropertyDecl property = PropertyDecl.of(name, this.type);
 		this.currentDeclaration.getProperties().add(property);
 	}
 

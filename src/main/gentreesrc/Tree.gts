@@ -1,34 +1,36 @@
 de.clashsoft.gentreesrc.tree.Node {
-	Import(packageName: String, typeName: String)
-	/*```
-	import <packageName>.<typeName>;
-	```*/
-
-	DefinitionFile(imports: [Import], declarations: [TypeDeclaration])
+	DefinitionFile(imports: [ImportDecl], declarations: [TypeDecl])
 	/*```
 	<imports\n...>
 
 	<declarations\n...>
 	```*/
 
-	Property(name: String, type: Type)
+	decl.Decl {
+		ImportDecl(packageName: String, typeName: String)
+		/*```
+		import <packageName>.<typeName>;
+		```*/
+
+		PropertyDecl(name: String, type: Type)
+
+		TypeDecl(
+			packageName: String
+			className: String
+			superType: TypeDecl
+			properties: [PropertyDecl]
+			subTypes: [TypeDecl]
+		)
+		/*```
+		<packageName>.<className>(<properties, ...>) {
+			<subTypes\n...>
+		}
+		```*/
+	}
 
 	type.Type {
 		NamedType(name: String)
 		ListType(elementType: Type)
 		OptionalType(wrappedType: Type)
 	}
-
-	TypeDeclaration(
-		packageName: String
-		className: String
-		superType: TypeDeclaration
-		properties: [Property]
-		subTypes: [TypeDeclaration]
-	)
-	/*```
-	<packageName>.<className>(<properties, ...>) {
-		<subTypes\n...>
-	}
-	```*/
 }

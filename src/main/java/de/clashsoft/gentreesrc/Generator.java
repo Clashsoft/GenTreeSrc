@@ -1,7 +1,7 @@
 package de.clashsoft.gentreesrc;
 
 import de.clashsoft.gentreesrc.tree.DefinitionFile;
-import de.clashsoft.gentreesrc.tree.TypeDeclaration;
+import de.clashsoft.gentreesrc.tree.decl.TypeDecl;
 import de.clashsoft.gentreesrc.util.GTSStringRenderer;
 import de.clashsoft.gentreesrc.util.ImportHelper;
 import org.stringtemplate.v4.AutoIndentWriter;
@@ -50,7 +50,7 @@ public class Generator
 
 		final Generator generator = new Generator(targetDirectory, importMap, treeGroup);
 
-		for (TypeDeclaration decl : definitionFile.getDeclarations())
+		for (TypeDecl decl : definitionFile.getDeclarations())
 		{
 			generator.generate(decl);
 		}
@@ -58,9 +58,9 @@ public class Generator
 
 	// =============== Methods ===============
 
-	private void generate(TypeDeclaration decl) throws IOException
+	private void generate(TypeDecl decl) throws IOException
 	{
-		for (TypeDeclaration subDecl : decl.getSubTypes())
+		for (TypeDecl subDecl : decl.getSubTypes())
 		{
 			this.generate(subDecl);
 		}
