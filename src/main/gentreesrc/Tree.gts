@@ -15,6 +15,7 @@ de.clashsoft.gentreesrc.tree.Node {
 		PropertyDecl(name: String, type: Type)
 
 		TypeDecl(
+			isAbstract: boolean
 			packageName: String
 			className: String
 			superType: TypeDecl

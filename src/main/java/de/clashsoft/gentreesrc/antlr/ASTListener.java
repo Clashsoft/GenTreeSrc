@@ -44,14 +44,15 @@ public class ASTListener extends GenTreeSrcBaseListener
 	@Override
 	public void enterTypeDeclaration(GenTreeSrcParser.TypeDeclarationContext ctx)
 	{
+		final boolean isAbstract = ctx.ABSTRACT() != null;
 		final String packageName = getPackageName(ctx.packageName());
 		final String className = ctx.className.getText();
 
 		TypeDecl parent = this.currentDeclaration;
 		final String fullPackageName = getPackageName(parent, packageName);
 
-		this.currentDeclaration = TypeDecl
-			                          .of(fullPackageName, className, parent, new ArrayList<>(), new ArrayList<>());
+		this.currentDeclaration = TypeDecl.of(isAbstract, fullPackageName, className, parent, new ArrayList<>(),
+		                                      new ArrayList<>());
 
 		if (parent != null)
 		{

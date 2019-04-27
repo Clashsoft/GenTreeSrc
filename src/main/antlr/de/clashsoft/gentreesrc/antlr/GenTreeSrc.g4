@@ -18,7 +18,7 @@ importDeclaration:
 // --------------- Type Declarations ---------------
 
 typeDeclaration:
-	packageName className=IDENTIFIER propertyList? subtypeList?;
+	ABSTRACT? packageName className=IDENTIFIER propertyList? subtypeList?;
 
 subtypeList:
 	'{' (typeDeclaration ';'?)* '}';
@@ -56,6 +56,7 @@ packageName: (IDENTIFIER '.')*;
 
 // =============== Lexer ===============
 
+ABSTRACT: 'abstract';
 IMPORT: 'import';
 
 IDENTIFIER: [a-zA-Z_][a-zA-Z0-9]*;

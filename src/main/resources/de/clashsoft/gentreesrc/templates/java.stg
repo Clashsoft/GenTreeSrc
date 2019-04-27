@@ -9,18 +9,19 @@ package <typeDecl.packageName>;
 
 public interface <typeDecl.className><if(typeDecl.superType)> extends <typeDecl.superType.className><endif>
 {
+	<if(!typeDecl.isAbstract)>
 	// =============== Static Methods ===============
 	static <typeDecl.className> of(<typeDecl.properties:parameter(); separator=", ">) { return new Impl(<typeDecl.properties:argument(); separator=", ">); }
-
+	<endif>
 	<if(typeDecl.properties)>
 	// =============== Properties ===============
 	<typeDecl.properties:getterSetter()>
 	<endif>
 	// =============== Methods ===============
 	\<P, R> R accept(<typeDecl.className>.Visitor\<P, R> visitor, P par);
-
 	// =============== Classes ===============
-	class Impl<if(typeDecl.superType)> extends <typeDecl.superType.className>.Impl<endif> implements <typeDecl.className>
+	<if(!typeDecl.isAbstract)>
+	class Impl<extends_(typeDecl.superType)> implements <typeDecl.className>
 	{
 		<if(typeDecl.properties)>
 		// =============== Fields ===============
@@ -38,7 +39,7 @@ public interface <typeDecl.className><if(typeDecl.superType)> extends <typeDecl.
 		// =============== Methods ===============
 		<acceptImplRecursively(typeDecl, typeDecl)>
 	}
-
+	<endif>
 	interface Visitor\<P, R><if(typeDecl.subTypes)> extends <typeDecl.subTypes:{s|<s.className>.Visitor\<P, R>}; separator=", "><endif>
 	{
 		// =============== Methods ===============
@@ -49,6 +50,13 @@ public interface <typeDecl.className><if(typeDecl.superType)> extends <typeDecl.
 >>
 
 // --------------- Helpers ---------------
+
+extends_(typeDecl) ::= <%
+<if(!typeDecl)>
+<elseif(!typeDecl.isAbstract)> extends <typeDecl.className>.Impl
+<else><extends_(typeDecl.superType)>
+<endif>
+%>
 
 import_(qualified) ::= <<
 import <qualified>;
