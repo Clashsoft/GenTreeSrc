@@ -20,3 +20,13 @@
 * Replaced references to the former `GenTreeSrc` class in `README.md` with `Main`.
 - Made the `Main` class uninstantiable by making it `final` and making the default constructor `private`.
 - Removed the `PropertyStyle` class.
+
+# GenTreeSrc v0.3.0
+
++ Add a `javax.tools.Tool` implementation.
+* Updated command-line parsing with new `-o` option for output directory.
+
+# GenTreeSrc v0.3.1
+
+* The `--language` option value is now normalized to lowercase.
+* Renamed the `Java.stg` template to `java.stg`.

@@ -61,7 +61,7 @@ public class Config
 
 	public void readOptions(CommandLine cmd)
 	{
-		this.setLanguage(cmd.getOptionValue("language", "java"));
+		this.setLanguage(cmd.getOptionValue("language", "java").toLowerCase());
 		this.setOutputDir(cmd.getOptionValue("outputDir", "src/main/" + this.getLanguage()));
 		this.getInputDirs().addAll(cmd.getArgList());
 	}
