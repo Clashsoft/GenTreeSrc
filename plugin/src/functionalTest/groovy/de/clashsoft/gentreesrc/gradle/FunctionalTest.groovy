@@ -32,10 +32,17 @@ class FunctionalTest extends Specification {
 		"""
 
 		testProjectDir.newFolder('src', 'main', 'gentreesrc')
-		testProjectDir.newFile('src/main/gentreesrc/Test.gts') << """
+		testProjectDir.newFile('src/main/gentreesrc/Main.gts') << """
 		com.example.Foo {
 			Bar(text: String)
 			Baz(value: int)
+		}
+		"""
+
+		testProjectDir.newFolder('src', 'test', 'gentreesrc')
+		testProjectDir.newFile('src/test/gentreesrc/Test.gts') << """
+		com.example.A {
+			B(a: A)
 		}
 		"""
 	}
@@ -44,7 +51,7 @@ class FunctionalTest extends Specification {
 		when:
 		def result = GradleRunner.create()
 				.withProjectDir(testProjectDir.root)
-				.withArguments('gentreesrcJava')
+				.withArguments('gentreesrcJava', 'gentreesrcTestJava')
 				.withPluginClasspath()
 				.build()
 
@@ -58,10 +65,15 @@ class FunctionalTest extends Specification {
 
 		then:
 		result.task(":gentreesrcJava").outcome == SUCCESS
+		result.task(":gentreesrcTestJava").outcome == SUCCESS
 
-		def outputDir = new File(testProjectDir.root, "build/generated-src/gentreesrc/main/java/")
-		new File(outputDir, 'com/example/Foo.java').exists()
-		new File(outputDir, 'com/example/Bar.java').exists()
-		new File(outputDir, 'com/example/Baz.java').exists()
+		def mainOutputDir = new File(testProjectDir.root, "build/generated-src/gentreesrc/main/java/")
+		new File(mainOutputDir, 'com/example/Foo.java').exists()
+		new File(mainOutputDir, 'com/example/Bar.java').exists()
+		new File(mainOutputDir, 'com/example/Baz.java').exists()
+
+		def testOutputDir = new File(testProjectDir.root, "build/generated-src/gentreesrc/test/java/")
+		new File(testOutputDir, 'com/example/A.java').exists()
+		new File(testOutputDir, 'com/example/B.java').exists()
 	}
 }

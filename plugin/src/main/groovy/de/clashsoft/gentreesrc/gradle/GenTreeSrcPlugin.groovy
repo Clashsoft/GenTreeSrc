@@ -1,39 +1,51 @@
 package de.clashsoft.gentreesrc.gradle
 
+
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.plugins.JavaPlugin
+import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.tasks.JavaExec
+import org.gradle.api.tasks.SourceSetContainer
 
 class GenTreeSrcPlugin implements Plugin<Project> {
 	@Override
 	void apply(Project project) {
 		String language = 'java'
-		String sourceSet = 'main'
+		String languageSuffix = language.capitalize()
 
-		String configurationName = 'gentreesrc' + (sourceSet == 'main' ? '' : sourceSet.capitalize())
-		String taskName = configurationName + language.capitalize()
-		String inputDir = "src/$sourceSet/gentreesrc/"
-		String outputDir = "$project.buildDir/generated-src/gentreesrc/$sourceSet/$language"
-
+		// configuration
+		String configurationName = 'gentreesrc'
 		Configuration configuration = project.configurations.create(configurationName)
 
-		project.tasks.register(taskName, JavaExec) {
-			classpath = configuration
-			main = 'de.clashsoft.gentreesrc.Main'
-			args = [ '-o', outputDir, inputDir ]
+		for (String sourceSet : [ 'main', 'test']) {
+			String sourceSetSuffix = sourceSet == 'main' ? '' : sourceSet.capitalize()
 
-			inputs.dir(inputDir)
-			outputs.dir(outputDir)
-		}
+			String taskName = configurationName + sourceSetSuffix + languageSuffix
+			String inputDir = "src/$sourceSet/gentreesrc/"
+			String outputDir = "$project.buildDir/generated-src/gentreesrc/$sourceSet/$language"
 
-		project.plugins.withType(JavaPlugin) {
-			// configure source directory
-			project.sourceSets.main.java.srcDir(project.files(outputDir).builtBy(taskName))
+			// task
+			project.tasks.register(taskName, JavaExec) {
+				classpath = configuration
+				main = 'de.clashsoft.gentreesrc.Main'
+				args = [ '-o', outputDir, inputDir ]
 
-			// configure compile dependency
-			project.tasks.compileJava.dependsOn(taskName)
+				inputs.dir(inputDir)
+				outputs.dir(outputDir)
+			}
+
+			project.plugins.withType(JavaPlugin) {
+				String compileTaskName = "compile${sourceSetSuffix}Java"
+				SourceSetContainer sourceSets = project.convention.getPlugin(JavaPluginConvention).sourceSets
+
+				// configure source directory
+				sourceSets.getByName(sourceSet).java.srcDir(project.files(outputDir).builtBy(taskName))
+
+				// configure compile task dependency
+				project.tasks.getByName(compileTaskName).dependsOn(taskName)
+			}
 		}
 	}
 }
