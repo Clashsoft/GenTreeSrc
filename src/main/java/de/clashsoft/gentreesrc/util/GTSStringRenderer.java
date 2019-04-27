@@ -2,6 +2,7 @@ package de.clashsoft.gentreesrc.util;
 
 import org.stringtemplate.v4.StringRenderer;
 
+import java.beans.Introspector;
 import java.util.Locale;
 
 public class GTSStringRenderer extends StringRenderer
@@ -9,6 +10,10 @@ public class GTSStringRenderer extends StringRenderer
 	@Override
 	public String toString(Object o, String formatString, Locale locale)
 	{
+		if ("decap".equals(formatString))
+		{
+			return Introspector.decapitalize(String.valueOf(o));
+		}
 		if (formatString != null && formatString.length() >= 4 && formatString.charAt(0) == 's')
 		{
 			final int delimiter = formatString.codePointAt(1);
