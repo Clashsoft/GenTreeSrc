@@ -42,7 +42,7 @@ public interface <typeDecl.className><if(typeDecl.superType)> extends <typeDecl.
 	interface Visitor\<P, R><if(typeDecl.subTypes)> extends <typeDecl.subTypes:{s|<s.className>.Visitor\<P, R>}; separator=", "><endif>
 	{
 		// =============== Methods ===============
-		R visit<typeDecl.className>(<typeDecl.className> <typeDecl.className>, P par);
+		R visit(<typeDecl.className> <typeDecl.className; format="decap">, P par);
 	}
 }
 
@@ -56,7 +56,7 @@ import <qualified>;
 >>
 
 acceptImpl(topDecl, typeDecl) ::= <<
-@Override public \<P, R> R accept(<typeDecl.className>.Visitor\<P, R> visitor, P par) { return visitor.visit<topDecl.className>(this, par); }
+@Override public \<P, R> R accept(<typeDecl.className>.Visitor\<P, R> visitor, P par) { return visitor.visit(this, par); }
 
 >>
 
