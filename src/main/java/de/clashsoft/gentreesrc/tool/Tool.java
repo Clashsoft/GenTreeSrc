@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -98,24 +99,35 @@ public class Tool implements javax.tools.Tool
 
 	private int run()
 	{
+		final Set<File> generatedFiles = new HashSet<>();
+
 		for (String inputDirName : this.config.getInputDirs())
 		{
 			final File inputFile = new File(inputDirName);
 			if (inputFile.exists())
 			{
-				this.process(inputFile);
+				this.process(inputFile, generatedFiles);
 			}
 		}
+
+		if (this.config.isDeleteOld())
+		{
+			for (File child : Objects.requireNonNull(new File(this.config.getOutputDir()).listFiles()))
+			{
+				this.deleteOld(child, generatedFiles);
+			}
+		}
+
 		return 0;
 	}
 
-	private void process(File inputFile)
+	private void process(File inputFile, Set<File> generatedFiles)
 	{
 		if (inputFile.isDirectory())
 		{
 			for (File child : Objects.requireNonNull(inputFile.listFiles()))
 			{
-				this.process(child);
+				this.process(child, generatedFiles);
 			}
 
 			return;
@@ -123,20 +135,45 @@ public class Tool implements javax.tools.Tool
 
 		if (inputFile.getName().endsWith(FILE_EXTENSION))
 		{
-			this.processDefinition(inputFile);
+			this.processDefinition(inputFile, generatedFiles);
 		}
 	}
 
-	private void processDefinition(File inputFile)
+	private void processDefinition(File inputFile, Set<File> generatedFiles)
 	{
 		try
 		{
 			final DefinitionFile definitionFile = Parser.parse(inputFile.getAbsolutePath());
-			Generator.generate(definitionFile, this.config.getOutputDir(), this.config.getLanguage());
+			Generator.generate(definitionFile, this.config.getOutputDir(), this.config.getLanguage(), generatedFiles);
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace(this.err);
+		}
+	}
+
+	@SuppressWarnings("ResultOfMethodCallIgnored")
+	private void deleteOld(File file, Set<File> generatedFiles)
+	{
+		if (file.isDirectory())
+		{
+			for (File child : Objects.requireNonNull(file.listFiles()))
+			{
+				this.deleteOld(child, generatedFiles);
+			}
+
+			// delete empty directory AFTER deleting children
+			if (Objects.requireNonNull(file.list()).length == 0)
+			{
+				file.delete();
+			}
+
+			return;
+		}
+
+		if (!generatedFiles.contains(file))
+		{
+			file.delete();
 		}
 	}
 }

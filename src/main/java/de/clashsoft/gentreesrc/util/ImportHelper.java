@@ -1,9 +1,9 @@
 package de.clashsoft.gentreesrc.util;
 
 import de.clashsoft.gentreesrc.tree.DefinitionFile;
-import de.clashsoft.gentreesrc.tree.Import;
-import de.clashsoft.gentreesrc.tree.Property;
-import de.clashsoft.gentreesrc.tree.TypeDeclaration;
+import de.clashsoft.gentreesrc.tree.decl.ImportDecl;
+import de.clashsoft.gentreesrc.tree.decl.PropertyDecl;
+import de.clashsoft.gentreesrc.tree.decl.TypeDecl;
 import de.clashsoft.gentreesrc.tree.type.ListType;
 import de.clashsoft.gentreesrc.tree.type.NamedType;
 import de.clashsoft.gentreesrc.tree.type.OptionalType;
@@ -18,22 +18,22 @@ public class ImportHelper
 
 	public static void collectImportMap(DefinitionFile definitionFile, Map<String, String> importMap)
 	{
-		for (Import import_ : definitionFile.getImports())
+		for (ImportDecl import_ : definitionFile.getImports())
 		{
 			importMap.put(import_.getTypeName(), import_.getPackageName());
 		}
 
-		for (TypeDeclaration decl : definitionFile.getDeclarations())
+		for (TypeDecl decl : definitionFile.getDeclarations())
 		{
 			collectImportMap(decl, importMap);
 		}
 	}
 
-	public static void collectImportMap(TypeDeclaration decl, Map<String, String> importMap)
+	public static void collectImportMap(TypeDecl decl, Map<String, String> importMap)
 	{
 		importMap.put(decl.getClassName(), decl.getPackageName());
 
-		for (TypeDeclaration subType : decl.getSubTypes())
+		for (TypeDecl subType : decl.getSubTypes())
 		{
 			collectImportMap(subType, importMap);
 		}
@@ -41,9 +41,9 @@ public class ImportHelper
 
 	// --------------- Imports ---------------
 
-	public static void collectImports(Map<String, String> importMap, TypeDeclaration decl, Set<String> imports)
+	public static void collectImports(Map<String, String> importMap, TypeDecl decl, Set<String> imports)
 	{
-		for (TypeDeclaration superType = decl.getSuperType(); superType != null; superType = superType.getSuperType())
+		for (TypeDecl superType = decl.getSuperType(); superType != null; superType = superType.getSuperType())
 		{
 			addImport(decl, imports, superType);
 		}
@@ -51,23 +51,23 @@ public class ImportHelper
 		collectImportsRecursively(importMap, decl, imports, decl);
 	}
 
-	private static void collectImportsRecursively(Map<String, String> importMap, TypeDeclaration decl,
-		Set<String> imports, TypeDeclaration current)
+	private static void collectImportsRecursively(Map<String, String> importMap, TypeDecl decl,
+		Set<String> imports, TypeDecl current)
 	{
 		addImport(decl, imports, current);
 
-		for (Property property : decl.getProperties())
+		for (PropertyDecl property : decl.getProperties())
 		{
 			addImport(importMap, decl, imports, property.getType());
 		}
 
-		for (TypeDeclaration subType : current.getSubTypes())
+		for (TypeDecl subType : current.getSubTypes())
 		{
 			collectImportsRecursively(importMap, decl, imports, subType);
 		}
 	}
 
-	private static void addImport(Map<String, String> importMap, TypeDeclaration decl, Set<String> imports, Type type)
+	private static void addImport(Map<String, String> importMap, TypeDecl decl, Set<String> imports, Type type)
 	{
 		type.accept(new Type.Visitor<Void, Void>()
 		{
@@ -99,7 +99,7 @@ public class ImportHelper
 		}, null);
 	}
 
-	private static void addImport(Map<String, String> importMap, TypeDeclaration decl, Set<String> imports,
+	private static void addImport(Map<String, String> importMap, TypeDecl decl, Set<String> imports,
 		String className)
 	{
 		final String packageName = importMap.get(className);
@@ -109,7 +109,7 @@ public class ImportHelper
 		}
 	}
 
-	private static void addImport(TypeDeclaration decl, Set<String> imports, TypeDeclaration target)
+	private static void addImport(TypeDecl decl, Set<String> imports, TypeDecl target)
 	{
 		if (!packageEquals(decl, target))
 		{
@@ -119,12 +119,12 @@ public class ImportHelper
 
 	// --------------- Declaration Helpers ---------------
 
-	private static boolean packageEquals(TypeDeclaration a, TypeDeclaration b)
+	private static boolean packageEquals(TypeDecl a, TypeDecl b)
 	{
 		return a == b || a.getPackageName().equals(b.getPackageName());
 	}
 
-	private static String getFullName(TypeDeclaration target)
+	private static String getFullName(TypeDecl target)
 	{
 		return getFullName(target.getPackageName(), target.getClassName());
 	}
