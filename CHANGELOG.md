@@ -30,3 +30,10 @@
 
 * The `--language` option value is now normalized to lowercase.
 * Renamed the `Java.stg` template to `java.stg`.
+
+# GenTreeSrc v0.4.0
+
+* The `Visitor.visit` method no longer uses the class name as a suffix. #12
+* The `Visitor.visit` parameter now uses a lowercase first letter. #12
++ Added the `abstract` type modifier. #13
++ Added the `-d` / `--delete-old` option that enables deletion of old files in the output directory. #15
