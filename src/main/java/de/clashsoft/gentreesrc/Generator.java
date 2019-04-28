@@ -10,18 +10,15 @@ import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 public class Generator
 {
 	// =============== Fields ===============
 
-	private final String targetDirectory;
+	private final String              targetDirectory;
 	private final Map<String, String> importMap;
-	private final STGroup treeGroup;
+	private final STGroup             treeGroup;
 
 	// =============== Constructors ===============
 
@@ -34,7 +31,15 @@ public class Generator
 
 	// =============== Static Methods ===============
 
-	public static void generate(DefinitionFile definitionFile, String targetDirectory, String language) throws IOException
+	@Deprecated
+	public static void generate(DefinitionFile definitionFile, String targetDirectory, String language)
+		throws IOException
+	{
+		generate(definitionFile, targetDirectory, language, new HashSet<>());
+	}
+
+	public static void generate(DefinitionFile definitionFile, String targetDirectory, String language,
+		Set<File> generatedFiles) throws IOException
 	{
 		// tree group
 
@@ -52,17 +57,17 @@ public class Generator
 
 		for (TypeDecl decl : definitionFile.getDeclarations())
 		{
-			generator.generate(decl);
+			generator.generate(decl, generatedFiles);
 		}
 	}
 
 	// =============== Methods ===============
 
-	private void generate(TypeDecl decl) throws IOException
+	private void generate(TypeDecl decl, Set<File> generatedFiles) throws IOException
 	{
 		for (TypeDecl subDecl : decl.getSubTypes())
 		{
-			this.generate(subDecl);
+			this.generate(subDecl, generatedFiles);
 		}
 
 		// imports
@@ -90,5 +95,7 @@ public class Generator
 			// because it does not require materializing the entire text in memory
 			treeClass.write(new AutoIndentWriter(writer));
 		}
+
+		generatedFiles.add(file);
 	}
 }
