@@ -1,7 +1,5 @@
 package org.test.abstracthierarchy;
 
-import com.example.*;
-
 public class StringVisitor implements A.Visitor<Object, String>
 {
 	@Override
