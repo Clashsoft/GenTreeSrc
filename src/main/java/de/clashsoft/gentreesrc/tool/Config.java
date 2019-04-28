@@ -15,6 +15,8 @@ public class Config
 	private String       outputDir;
 	private List<String> inputDirs = new ArrayList<>();
 
+	private boolean deleteOld;
+
 	// =============== Properties ===============
 
 	public String getLanguage()
@@ -42,6 +44,16 @@ public class Config
 		return this.inputDirs;
 	}
 
+	public boolean isDeleteOld()
+	{
+		return this.deleteOld;
+	}
+
+	public void setDeleteOld(boolean deleteOld)
+	{
+		this.deleteOld = deleteOld;
+	}
+
 	// =============== Methods ===============
 
 	public Options createOptions()
@@ -56,6 +68,8 @@ public class Config
 		modelDir.setRequired(false);
 		options.addOption(modelDir);
 
+		options.addOption(new Option("d", "delete-old", false, "delete old files in output directory"));
+
 		return options;
 	}
 
@@ -64,5 +78,6 @@ public class Config
 		this.setLanguage(cmd.getOptionValue("language", "java").toLowerCase());
 		this.setOutputDir(cmd.getOptionValue("outputDir", "src/main/" + this.getLanguage()));
 		this.getInputDirs().addAll(cmd.getArgList());
+		this.setDeleteOld(cmd.hasOption("delete-old"));
 	}
 }
