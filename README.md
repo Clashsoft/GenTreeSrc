@@ -2,21 +2,20 @@
 
 [![Build Status](https://travis-ci.org/Clashsoft/GenTreeSrc.svg?branch=master)](https://travis-ci.org/Clashsoft/GenTreeSrc)
 [![Download](https://api.bintray.com/packages/clashsoft/maven/gentreesrc/images/download.svg)](https://bintray.com/clashsoft/maven/gentreesrc/_latestVersion)
-[![Gradle Plugin Portal](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/de/clashsoft/gentreesrc-gradle/de.clashsoft.gentreesrc-gradle.gradle.plugin/maven-metadata.xml.svg?colorB=blue&label=Gradle%20Plugin%20Portal)](https://plugins.gradle.org/plugin/de.clashsoft.gentreesrc-gradle)
 
 A tool that generates Tree and Visitor classes from a description file.
 
 ## Installation
 
-The easiest way to use GenTreeSrc is with the Gradle plugin, which is available on the
-[Gradle Plugin Portal](https://plugins.gradle.org/plugin/de.clashsoft.gentreesrc-gradle).
-Add the following snippets to your `build.gradle` to configure the plugin:
+The easiest way to use GenTreeSrc is with the [Gradle plugin](https://github.com/Clashsoft/GenTreeSrc-Gradle),
+which is available on the [Gradle Plugin Portal](https://plugins.gradle.org/plugin/de.clashsoft.gentreesrc-gradle).
+Add the following snippets to your `build.gradle` to set up the plugin:
 
 ```groovy
 plugins {
 	// ...
 	// https://plugins.gradle.org/plugin/de.clashsoft.gentreesrc-gradle
-	id 'de.clashsoft.gentreesrc-gradle' version '0.1.1'
+	id 'de.clashsoft.gentreesrc-gradle' version '0.2.0'
 	// ...
 }
 // ...
