@@ -1,5 +1,6 @@
 package de.clashsoft.gentreesrc;
 
+import de.clashsoft.gentreesrc.tool.Config;
 import de.clashsoft.gentreesrc.tree.DefinitionFile;
 import de.clashsoft.gentreesrc.tree.decl.TypeDecl;
 import de.clashsoft.gentreesrc.util.GTSStringRenderer;
@@ -10,40 +11,37 @@ import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
 
 import java.io.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class Generator
 {
 	// =============== Fields ===============
 
-	private final String              targetDirectory;
+	private final Config              config;
 	private final Map<String, String> importMap;
 	private final STGroup             treeGroup;
 
 	// =============== Constructors ===============
 
-	private Generator(String targetDirectory, Map<String, String> importMap, STGroup treeGroup)
+	private Generator(Config config, Map<String, String> importMap, STGroup treeGroup)
 	{
-		this.targetDirectory = targetDirectory;
+		this.config = config;
 		this.importMap = importMap;
 		this.treeGroup = treeGroup;
 	}
 
 	// =============== Static Methods ===============
 
-	@Deprecated
-	public static void generate(DefinitionFile definitionFile, String targetDirectory, String language)
+	public static void generate(Config config, DefinitionFile definitionFile, Set<File> generatedFiles)
 		throws IOException
-	{
-		generate(definitionFile, targetDirectory, language, new HashSet<>());
-	}
-
-	public static void generate(DefinitionFile definitionFile, String targetDirectory, String language,
-		Set<File> generatedFiles) throws IOException
 	{
 		// tree group
 
-		final STGroup treeGroup = new STGroupFile(Generator.class.getResource("templates/" + language + ".stg"));
+		final STGroup treeGroup = new STGroupFile(
+			Generator.class.getResource("templates/" + config.getLanguage() + ".stg"));
 		treeGroup.registerRenderer(String.class, new GTSStringRenderer());
 
 		// import map
@@ -53,7 +51,7 @@ public class Generator
 
 		// generate
 
-		final Generator generator = new Generator(targetDirectory, importMap, treeGroup);
+		final Generator generator = new Generator(config, importMap, treeGroup);
 
 		for (TypeDecl decl : definitionFile.getDeclarations())
 		{
@@ -78,7 +76,7 @@ public class Generator
 		// target file
 
 		final String fileName = this.treeGroup.getInstanceOf("fileName").add("typeDecl", decl).render();
-		final File file = new File(this.targetDirectory, fileName);
+		final File file = new File(this.config.getOutputDir(), fileName);
 
 		//noinspection ResultOfMethodCallIgnored
 		file.getParentFile().mkdirs();
@@ -86,6 +84,7 @@ public class Generator
 		// main class
 
 		final ST treeClass = this.treeGroup.getInstanceOf("treeClass");
+		treeClass.add("config", this.config);
 		treeClass.add("typeDecl", decl);
 		treeClass.add("imports", imports);
 

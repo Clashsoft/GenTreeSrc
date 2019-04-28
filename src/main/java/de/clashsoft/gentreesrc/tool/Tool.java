@@ -144,7 +144,7 @@ public class Tool implements javax.tools.Tool
 		try
 		{
 			final DefinitionFile definitionFile = Parser.parse(inputFile.getAbsolutePath());
-			Generator.generate(definitionFile, this.config.getOutputDir(), this.config.getLanguage(), generatedFiles);
+			Generator.generate(this.config, definitionFile, generatedFiles);
 		}
 		catch (Exception e)
 		{
