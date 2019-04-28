@@ -18,7 +18,7 @@ public interface <typeDecl.className><if(typeDecl.superType)> extends <typeDecl.
 	<typeDecl.properties:getterSetter()>
 	<endif>
 	// =============== Methods ===============
-	\<P, R> R accept(<typeDecl.className>.Visitor\<P, R> visitor, P par);
+	<visitTypes(config)> <visitRet(config)> accept(<typeDecl.className>.Visitor<visitTypes(config)> visitor<visitPar(config)>);
 	// =============== Classes ===============
 	<if(!typeDecl.isAbstract)>
 	class Impl<extends_(typeDecl.superType)> implements <typeDecl.className>
@@ -37,19 +37,47 @@ public interface <typeDecl.className><if(typeDecl.superType)> extends <typeDecl.
 		<typeDecl.properties:getterSetterImpl()>
 		<endif>
 		// =============== Methods ===============
-		<acceptImplRecursively(typeDecl, typeDecl)>
+		<acceptImplRecursively(config, typeDecl, typeDecl)>
 	}
 	<endif>
-	interface Visitor\<P, R><if(typeDecl.subTypes)> extends <typeDecl.subTypes:{s|<s.className>.Visitor\<P, R>}; separator=", "><endif>
+	interface Visitor<visitTypes(config)><if(typeDecl.subTypes)> extends <typeDecl.subTypes:{s|<s.className>.Visitor<visitTypes(config)>}; separator=", "><endif>
 	{
 		// =============== Methods ===============
-		R visit(<typeDecl.className> <typeDecl.className; format="decap">, P par);
+		<visitRet(config)> visit(<typeDecl.className> <typeDecl.className; format="decap"><visitPar(config)>);
 	}
 }
 
 >>
 
 // --------------- Helpers ---------------
+
+visitTypes(config) ::= <%
+<if(config.visitPar)>
+	<if(config.visitRet)>
+		\<P, R>
+	<else>
+		\<P>
+	<endif>
+<elseif(config.visitRet)>
+	\<R>
+<else>
+<endif>
+%>
+
+visitRet(config) ::= <%
+<if(config.visitRet)>
+R
+<else>
+void
+<endif>
+%>
+
+visitPar(config) ::= <%
+<if(config.visitPar)>
+, P par
+<else>
+<endif>
+%>
 
 extends_(typeDecl) ::= <%
 <if(!typeDecl)>
@@ -63,15 +91,16 @@ import <qualified>;
 
 >>
 
-acceptImpl(topDecl, typeDecl) ::= <<
-@Override public \<P, R> R accept(<typeDecl.className>.Visitor\<P, R> visitor, P par) { return visitor.visit(this, par); }
-
->>
-
-acceptImplRecursively(topDecl, typeDecl) ::= <%
-<acceptImpl(topDecl, typeDecl)>
-<if(typeDecl.superType)><acceptImplRecursively(topDecl, typeDecl.superType)><endif>
+acceptImpl(config, topDecl, typeDecl) ::= <%
+@Override public <visitTypes(config)> <visitRet(config)> accept(
+<typeDecl.className>.Visitor<visitTypes(config)> visitor<visitPar(config)>
+) { <if(config.visitRet)>return <endif>visitor.visit(this<if(config.visitPar)>, par<endif>); }
 %>
+
+acceptImplRecursively(config, topDecl, typeDecl) ::= <<
+<acceptImpl(config, topDecl, typeDecl)>
+<if(typeDecl.superType)><acceptImplRecursively(config, topDecl, typeDecl.superType)><endif>
+>>
 
 // --------------- Types ---------------
 
