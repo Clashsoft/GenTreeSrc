@@ -120,6 +120,10 @@ type_ListType(type) ::= <%
 List\<<type(type.elementType)>>
 %>
 
+type_MapType(type) ::= <%
+Map\<<type(type.keyType)>, <type(type.valueType)>>
+%>
+
 type_OptionalType(type) ::= <%
 <type(type.wrappedType)>
 %>

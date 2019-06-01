@@ -4,10 +4,7 @@ import de.clashsoft.gentreesrc.tree.DefinitionFile;
 import de.clashsoft.gentreesrc.tree.decl.ImportDecl;
 import de.clashsoft.gentreesrc.tree.decl.PropertyDecl;
 import de.clashsoft.gentreesrc.tree.decl.TypeDecl;
-import de.clashsoft.gentreesrc.tree.type.ListType;
-import de.clashsoft.gentreesrc.tree.type.NamedType;
-import de.clashsoft.gentreesrc.tree.type.OptionalType;
-import de.clashsoft.gentreesrc.tree.type.Type;
+import de.clashsoft.gentreesrc.tree.type.*;
 
 import java.util.Map;
 import java.util.Set;
@@ -95,6 +92,15 @@ public class ImportHelper
 			public Void visitOptionalType(OptionalType optionalType, Void par)
 			{
 				return optionalType.getWrappedType().accept(this, par);
+			}
+
+			@Override
+			public Void visitMapType(MapType mapType, Void par)
+			{
+				imports.add("java.util.Map");
+				mapType.getKeyType().accept(this, par);
+				mapType.getValueType().accept(this, par);
+				return null;
 			}
 		}, null);
 	}

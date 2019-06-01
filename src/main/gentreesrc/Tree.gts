@@ -32,6 +32,7 @@ de.clashsoft.gentreesrc.tree.Node {
 	type.Type {
 		NamedType(name: String)
 		ListType(elementType: Type)
+		MapType(keyType: Type, valueType: Type)
 		OptionalType(wrappedType: Type)
 	}
 }
