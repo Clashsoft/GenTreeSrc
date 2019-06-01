@@ -5,7 +5,11 @@ import de.clashsoft.gentreesrc.tree.decl.ImportDecl;
 import de.clashsoft.gentreesrc.tree.decl.PropertyDecl;
 import de.clashsoft.gentreesrc.tree.decl.TypeDecl;
 import de.clashsoft.gentreesrc.tree.type.*;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
+import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -25,6 +29,20 @@ public class ASTListener extends GenTreeSrcBaseListener
 	public ASTListener(DefinitionFile definitionFile)
 	{
 		this.definitionFile = definitionFile;
+	}
+
+	// =============== Static Methods ===============
+
+	public static DefinitionFile parse(String descriptionFile) throws IOException
+	{
+		final GenTreeSrcLexer lexer = new GenTreeSrcLexer(CharStreams.fromFileName(descriptionFile));
+		final GenTreeSrcParser parser = new GenTreeSrcParser(new CommonTokenStream(lexer));
+
+		final DefinitionFile definitionFile = DefinitionFile.of(new ArrayList<>(), new ArrayList<>());
+
+		ParseTreeWalker.DEFAULT.walk(new ASTListener(definitionFile), parser.main());
+
+		return definitionFile;
 	}
 
 	// =============== Methods ===============

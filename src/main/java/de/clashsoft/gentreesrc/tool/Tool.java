@@ -1,7 +1,7 @@
 package de.clashsoft.gentreesrc.tool;
 
+import de.clashsoft.gentreesrc.antlr.ASTListener;
 import de.clashsoft.gentreesrc.codegen.Generator;
-import de.clashsoft.gentreesrc.antlr.Parser;
 import de.clashsoft.gentreesrc.tree.DefinitionFile;
 import org.apache.commons.cli.*;
 
@@ -143,7 +143,7 @@ public class Tool implements javax.tools.Tool
 	{
 		try
 		{
-			final DefinitionFile definitionFile = Parser.parse(inputFile.getAbsolutePath());
+			final DefinitionFile definitionFile = ASTListener.parse(inputFile.getAbsolutePath());
 			Generator.generate(this.config, definitionFile, generatedFiles);
 		}
 		catch (Exception e)
