@@ -1,9 +1,5 @@
 grammar GenTreeSrc;
 
-@header {
-package de.clashsoft.gentreesrc.antlr;
-}
-
 // =============== Parser ===============
 
 // --------------- Main File and Header ---------------
