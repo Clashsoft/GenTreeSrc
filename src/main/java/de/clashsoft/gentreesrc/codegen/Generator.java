@@ -38,8 +38,7 @@ public class Generator
 	{
 		// tree group
 
-		final STGroup treeGroup = new STGroupFile(
-			Generator.class.getResource("templates/" + config.getLanguage() + ".stg"));
+		final STGroup treeGroup = new STGroupFile(Generator.class.getResource(config.getLanguage() + ".stg"));
 		treeGroup.registerRenderer(String.class, new StringRenderer());
 
 		// import map
