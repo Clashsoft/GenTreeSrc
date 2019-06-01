@@ -32,3 +32,8 @@
 * The `Visitor.visit` parameter now uses a lowercase first letter. #12
 + Added the `abstract` type modifier. #13
 + Added the `-d` / `--delete-old` option that enables deletion of old files in the output directory. #15
+
+# GenTreeSrc v0.5.0
+
++ Added Map Types. #17
++ Added the `--visit-par`, `--no-visit-par`, `--visit-return` and `--visit-void` options. #16
