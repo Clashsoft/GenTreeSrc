@@ -16,6 +16,8 @@ public class Config
 	private List<String> inputDirs = new ArrayList<>();
 
 	private boolean deleteOld;
+	private boolean visitPar;
+	private boolean visitRet;
 
 	// =============== Properties ===============
 
@@ -54,6 +56,26 @@ public class Config
 		this.deleteOld = deleteOld;
 	}
 
+	public boolean isVisitPar()
+	{
+		return this.visitPar;
+	}
+
+	public void setVisitPar(boolean visitPar)
+	{
+		this.visitPar = visitPar;
+	}
+
+	public boolean isVisitRet()
+	{
+		return this.visitRet;
+	}
+
+	public void setVisitRet(boolean visitRet)
+	{
+		this.visitRet = visitRet;
+	}
+
 	// =============== Methods ===============
 
 	public Options createOptions()
@@ -70,6 +92,14 @@ public class Config
 
 		options.addOption(new Option("d", "delete-old", false, "delete old files in output directory"));
 
+		options.addOption(
+			new Option(null, "visit-par", false, "add a 'P par' parameter to visit and accept methods (default)"));
+		options.addOption(
+			new Option(null, "no-visit-par", false, "do not add 'P par' parameter to visit and accept methods"));
+		options.addOption(
+			new Option(null, "visit-return", false, "make visit and accept methods return a generic type R (default)"));
+		options.addOption(new Option(null, "visit-void", false, "make visit and accept methods return void"));
+
 		return options;
 	}
 
@@ -79,5 +109,8 @@ public class Config
 		this.setOutputDir(cmd.getOptionValue("outputDir", "src/main/" + this.getLanguage()));
 		this.getInputDirs().addAll(cmd.getArgList());
 		this.setDeleteOld(cmd.hasOption("delete-old"));
+
+		this.setVisitPar(!cmd.hasOption("no-visit-par"));
+		this.setVisitRet(!cmd.hasOption("visit-void"));
 	}
 }

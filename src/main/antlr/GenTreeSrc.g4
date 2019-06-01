@@ -1,9 +1,5 @@
 grammar GenTreeSrc;
 
-@header {
-package de.clashsoft.gentreesrc.antlr;
-}
-
 // =============== Parser ===============
 
 // --------------- Main File and Header ---------------
@@ -46,10 +42,13 @@ nonOptionalType:
 	namedType
 	|
 	listType
+	|
+	mapType
 	;
 
 namedType: name=IDENTIFIER;
 listType: '[' elementType=type ']';
+mapType: '[' keyType=type ':' valueType=type ']';
 optionalType: nonOptionalType '?';
 
 packageName: (IDENTIFIER '.')*;

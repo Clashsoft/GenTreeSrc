@@ -4,12 +4,15 @@ import de.clashsoft.gentreesrc.tree.DefinitionFile;
 import de.clashsoft.gentreesrc.tree.decl.ImportDecl;
 import de.clashsoft.gentreesrc.tree.decl.PropertyDecl;
 import de.clashsoft.gentreesrc.tree.decl.TypeDecl;
-import de.clashsoft.gentreesrc.tree.type.ListType;
-import de.clashsoft.gentreesrc.tree.type.NamedType;
-import de.clashsoft.gentreesrc.tree.type.OptionalType;
-import de.clashsoft.gentreesrc.tree.type.Type;
+import de.clashsoft.gentreesrc.tree.type.*;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
+import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 
 public class ASTListener extends GenTreeSrcBaseListener
 {
@@ -19,13 +22,27 @@ public class ASTListener extends GenTreeSrcBaseListener
 
 	private TypeDecl currentDeclaration;
 
-	private Type type;
+	private Deque<Type> type = new ArrayDeque<>(2);
 
 	// =============== Constructors ===============
 
 	public ASTListener(DefinitionFile definitionFile)
 	{
 		this.definitionFile = definitionFile;
+	}
+
+	// =============== Static Methods ===============
+
+	public static DefinitionFile parse(String descriptionFile) throws IOException
+	{
+		final GenTreeSrcLexer lexer = new GenTreeSrcLexer(CharStreams.fromFileName(descriptionFile));
+		final GenTreeSrcParser parser = new GenTreeSrcParser(new CommonTokenStream(lexer));
+
+		final DefinitionFile definitionFile = DefinitionFile.of(new ArrayList<>(), new ArrayList<>());
+
+		ParseTreeWalker.DEFAULT.walk(new ASTListener(definitionFile), parser.main());
+
+		return definitionFile;
 	}
 
 	// =============== Methods ===============
@@ -90,7 +107,7 @@ public class ASTListener extends GenTreeSrcBaseListener
 	public void exitProperty(GenTreeSrcParser.PropertyContext ctx)
 	{
 		final String name = ctx.name.getText();
-		final PropertyDecl property = PropertyDecl.of(name, this.type);
+		final PropertyDecl property = PropertyDecl.of(name, this.type.pop());
 		this.currentDeclaration.getProperties().add(property);
 	}
 
@@ -100,19 +117,27 @@ public class ASTListener extends GenTreeSrcBaseListener
 	public void exitNamedType(GenTreeSrcParser.NamedTypeContext ctx)
 	{
 		final String name = ctx.name.getText();
-		this.type = NamedType.of(name);
+		this.type.push(NamedType.of(name));
 	}
 
 	@Override
 	public void exitListType(GenTreeSrcParser.ListTypeContext ctx)
 	{
-		this.type = ListType.of(this.type);
+		this.type.push(ListType.of(this.type.pop()));
+	}
+
+	@Override
+	public void exitMapType(GenTreeSrcParser.MapTypeContext ctx)
+	{
+		final Type valueType = this.type.pop();
+		final Type keyType = this.type.pop();
+		this.type.push(MapType.of(keyType, valueType));
 	}
 
 	@Override
 	public void exitOptionalType(GenTreeSrcParser.OptionalTypeContext ctx)
 	{
-		this.type = OptionalType.of(this.type);
+		this.type.push(OptionalType.of(this.type.pop()));
 	}
 
 	@Override
