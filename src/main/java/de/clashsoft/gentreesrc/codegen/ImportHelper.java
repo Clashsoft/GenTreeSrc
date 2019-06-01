@@ -1,4 +1,4 @@
-package de.clashsoft.gentreesrc.util;
+package de.clashsoft.gentreesrc.codegen;
 
 import de.clashsoft.gentreesrc.tree.DefinitionFile;
 import de.clashsoft.gentreesrc.tree.decl.ImportDecl;

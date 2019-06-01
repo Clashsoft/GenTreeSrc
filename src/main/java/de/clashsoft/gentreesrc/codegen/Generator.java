@@ -1,10 +1,8 @@
-package de.clashsoft.gentreesrc;
+package de.clashsoft.gentreesrc.codegen;
 
 import de.clashsoft.gentreesrc.tool.Config;
 import de.clashsoft.gentreesrc.tree.DefinitionFile;
 import de.clashsoft.gentreesrc.tree.decl.TypeDecl;
-import de.clashsoft.gentreesrc.util.GTSStringRenderer;
-import de.clashsoft.gentreesrc.util.ImportHelper;
 import org.stringtemplate.v4.AutoIndentWriter;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
@@ -42,7 +40,7 @@ public class Generator
 
 		final STGroup treeGroup = new STGroupFile(
 			Generator.class.getResource("templates/" + config.getLanguage() + ".stg"));
-		treeGroup.registerRenderer(String.class, new GTSStringRenderer());
+		treeGroup.registerRenderer(String.class, new StringRenderer());
 
 		// import map
 

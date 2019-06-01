@@ -1,7 +1,7 @@
 package de.clashsoft.gentreesrc.tool;
 
-import de.clashsoft.gentreesrc.Generator;
-import de.clashsoft.gentreesrc.Parser;
+import de.clashsoft.gentreesrc.codegen.Generator;
+import de.clashsoft.gentreesrc.antlr.Parser;
 import de.clashsoft.gentreesrc.tree.DefinitionFile;
 import org.apache.commons.cli.*;
 

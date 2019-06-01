@@ -1,11 +1,9 @@
-package de.clashsoft.gentreesrc.util;
-
-import org.stringtemplate.v4.StringRenderer;
+package de.clashsoft.gentreesrc.codegen;
 
 import java.beans.Introspector;
 import java.util.Locale;
 
-public class GTSStringRenderer extends StringRenderer
+public class StringRenderer extends org.stringtemplate.v4.StringRenderer
 {
 	@Override
 	public String toString(Object o, String formatString, Locale locale)
