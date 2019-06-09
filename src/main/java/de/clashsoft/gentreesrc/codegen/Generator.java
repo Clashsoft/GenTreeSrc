@@ -65,6 +65,12 @@ public class Generator
 			this.generate(subDecl, generatedFiles);
 		}
 
+		if (decl.getAttributes().isImport())
+		{
+			// type declarations marked 'import' do not generate any code
+			return;
+		}
+
 		// imports
 
 		final Set<String> imports = new TreeSet<>();

@@ -1,9 +1,7 @@
 package de.clashsoft.gentreesrc.antlr;
 
 import de.clashsoft.gentreesrc.tree.DefinitionFile;
-import de.clashsoft.gentreesrc.tree.decl.ImportDecl;
-import de.clashsoft.gentreesrc.tree.decl.PropertyDecl;
-import de.clashsoft.gentreesrc.tree.decl.TypeDecl;
+import de.clashsoft.gentreesrc.tree.decl.*;
 import de.clashsoft.gentreesrc.tree.type.*;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -61,14 +59,26 @@ public class ASTListener extends GenTreeSrcBaseListener
 	@Override
 	public void enterTypeDeclaration(GenTreeSrcParser.TypeDeclarationContext ctx)
 	{
-		final boolean isAbstract = ctx.ABSTRACT() != null;
+		final Attributes attributes = new Attributes();
+		for (final GenTreeSrcParser.TypeModifierContext modCtx : ctx.typeModifier())
+		{
+			if (modCtx.ABSTRACT() != null)
+			{
+				attributes.add(Modifier.ABSTRACT);
+			}
+			else if (modCtx.IMPORT() != null)
+			{
+				attributes.add(Modifier.IMPORT);
+			}
+		}
+
 		final String packageName = getPackageName(ctx.packageName());
 		final String className = ctx.className.getText();
 
 		TypeDecl parent = this.currentDeclaration;
 		final String fullPackageName = getPackageName(parent, packageName);
 
-		this.currentDeclaration = TypeDecl.of(isAbstract, fullPackageName, className, parent, new ArrayList<>(),
+		this.currentDeclaration = TypeDecl.of(attributes, fullPackageName, className, parent, new ArrayList<>(),
 		                                      new ArrayList<>());
 
 		if (parent != null)

@@ -1,3 +1,5 @@
+import de.clashsoft.gentreesrc.tree.decl.Attributes
+
 de.clashsoft.gentreesrc.tree.Node {
 	DefinitionFile(imports: [ImportDecl], declarations: [TypeDecl])
 	/*```
@@ -15,7 +17,7 @@ de.clashsoft.gentreesrc.tree.Node {
 		PropertyDecl(name: String, type: Type)
 
 		TypeDecl(
-			isAbstract: boolean
+			attributes: Attributes
 			packageName: String
 			className: String
 			superType: TypeDecl

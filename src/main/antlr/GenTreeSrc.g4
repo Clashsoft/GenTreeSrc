@@ -14,7 +14,9 @@ importDeclaration:
 // --------------- Type Declarations ---------------
 
 typeDeclaration:
-	ABSTRACT? packageName className=IDENTIFIER propertyList? subtypeList?;
+	typeModifier* packageName className=IDENTIFIER propertyList? subtypeList?;
+
+typeModifier: ABSTRACT | IMPORT;
 
 subtypeList:
 	'{' (typeDeclaration ';'?)* '}';
