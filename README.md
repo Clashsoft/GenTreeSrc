@@ -15,7 +15,7 @@ Add the following snippets to your `build.gradle` to set up the plugin:
 plugins {
 	// ...
 	// https://plugins.gradle.org/plugin/de.clashsoft.gentreesrc-gradle
-	id 'de.clashsoft.gentreesrc-gradle' version '0.2.0'
+	id 'de.clashsoft.gentreesrc-gradle' version '0.3.0'
 	// ...
 }
 // ...
@@ -28,7 +28,7 @@ repositories {
 dependencies {
 	// ...
 	// https://mvnrepository.com/artifact/de.clashsoft/gentreesrc
-	gentreesrc group: 'de.clashsoft', name: 'gentreesrc', version: '0.5.0'
+	gentreesrc group: 'de.clashsoft', name: 'gentreesrc', version: '0.6.0'
 	// ...
 }
 ```

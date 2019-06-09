@@ -37,3 +37,9 @@
 
 + Added Map Types. #17
 + Added the `--visit-par`, `--no-visit-par`, `--visit-return` and `--visit-void` options. #16
+
+# GenTreeSrc v0.6.0
+
++ Added support for named types with generic arguments. #20
++ Added the `import` type declaration modifier that prevents code generation. #19
+* Import declarations are now treated like type declarations. #19
