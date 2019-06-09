@@ -63,13 +63,13 @@ public class ImportHelper
 		type.accept(new Type.Visitor<Void, Void>()
 		{
 			@Override
-			public Void visitType(Type type, Void par)
+			public Void visit(Type type, Void par)
 			{
 				return null;
 			}
 
 			@Override
-			public Void visitNamedType(NamedType namedType, Void par)
+			public Void visit(NamedType namedType, Void par)
 			{
 				addImport(importMap, decl, imports, namedType.getName());
 				if (namedType.getArgs() != null)
@@ -83,20 +83,20 @@ public class ImportHelper
 			}
 
 			@Override
-			public Void visitListType(ListType listType, Void par)
+			public Void visit(ListType listType, Void par)
 			{
 				imports.add("java.util.List");
 				return listType.getElementType().accept(this, par);
 			}
 
 			@Override
-			public Void visitOptionalType(OptionalType optionalType, Void par)
+			public Void visit(OptionalType optionalType, Void par)
 			{
 				return optionalType.getWrappedType().accept(this, par);
 			}
 
 			@Override
-			public Void visitMapType(MapType mapType, Void par)
+			public Void visit(MapType mapType, Void par)
 			{
 				imports.add("java.util.Map");
 				mapType.getKeyType().accept(this, par);
