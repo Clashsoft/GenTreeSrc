@@ -1,7 +1,7 @@
 import de.clashsoft.gentreesrc.tree.decl.Attributes
 
 de.clashsoft.gentreesrc.tree.Node {
-	DefinitionFile(imports: [ImportDecl], declarations: [TypeDecl])
+	DefinitionFile(declarations: [TypeDecl])
 	/*```
 	<imports\n...>
 
@@ -9,11 +9,6 @@ de.clashsoft.gentreesrc.tree.Node {
 	```*/
 
 	decl.Decl {
-		ImportDecl(packageName: String, typeName: String)
-		/*```
-		import <packageName>.<typeName>;
-		```*/
-
 		PropertyDecl(name: String, type: Type)
 
 		TypeDecl(

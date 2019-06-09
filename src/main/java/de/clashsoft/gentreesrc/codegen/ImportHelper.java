@@ -1,7 +1,6 @@
 package de.clashsoft.gentreesrc.codegen;
 
 import de.clashsoft.gentreesrc.tree.DefinitionFile;
-import de.clashsoft.gentreesrc.tree.decl.ImportDecl;
 import de.clashsoft.gentreesrc.tree.decl.PropertyDecl;
 import de.clashsoft.gentreesrc.tree.decl.TypeDecl;
 import de.clashsoft.gentreesrc.tree.type.*;
@@ -15,11 +14,6 @@ public class ImportHelper
 
 	public static void collectImportMap(DefinitionFile definitionFile, Map<String, String> importMap)
 	{
-		for (ImportDecl import_ : definitionFile.getImports())
-		{
-			importMap.put(import_.getTypeName(), import_.getPackageName());
-		}
-
 		for (TypeDecl decl : definitionFile.getDeclarations())
 		{
 			collectImportMap(decl, importMap);

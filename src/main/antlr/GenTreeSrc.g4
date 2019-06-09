@@ -4,12 +4,7 @@ grammar GenTreeSrc;
 
 // --------------- Main File and Header ---------------
 
-main:
-	(importDeclaration ';'?)*
-	(typeDeclaration ';'?)+;
-
-importDeclaration:
-	IMPORT packageName typeName=IDENTIFIER;
+main: (typeDeclaration ';'?)+;
 
 // --------------- Type Declarations ---------------
 

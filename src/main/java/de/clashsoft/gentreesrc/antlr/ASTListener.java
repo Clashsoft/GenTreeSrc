@@ -35,7 +35,7 @@ public class ASTListener extends GenTreeSrcBaseListener
 		final GenTreeSrcLexer lexer = new GenTreeSrcLexer(CharStreams.fromFileName(descriptionFile));
 		final GenTreeSrcParser parser = new GenTreeSrcParser(new CommonTokenStream(lexer));
 
-		final DefinitionFile definitionFile = DefinitionFile.of(new ArrayList<>(), new ArrayList<>());
+		final DefinitionFile definitionFile = DefinitionFile.of(new ArrayList<>());
 
 		ParseTreeWalker.DEFAULT.walk(new ASTListener(definitionFile), parser.main());
 
@@ -65,17 +65,6 @@ public class ASTListener extends GenTreeSrcBaseListener
 			result.set(i, type.cast(this.stack.pop()));
 		}
 		return result;
-	}
-
-	@Override
-	public void enterImportDeclaration(GenTreeSrcParser.ImportDeclarationContext ctx)
-	{
-		final String packageName = getPackageName(ctx.packageName());
-		final String typeName = ctx.typeName.getText();
-
-		final ImportDecl import_ = ImportDecl.of(packageName, typeName);
-
-		this.definitionFile.getImports().add(import_);
 	}
 
 	@Override
