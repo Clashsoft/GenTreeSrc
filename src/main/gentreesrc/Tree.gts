@@ -1,14 +1,9 @@
 import de.clashsoft.gentreesrc.tree.decl.Attributes
 
-de.clashsoft.gentreesrc.tree.Node {
+abstract de.clashsoft.gentreesrc.tree.Node {
 	DefinitionFile(declarations: [TypeDecl])
-	/*```
-	<imports\n...>
 
-	<declarations\n...>
-	```*/
-
-	decl.Decl {
+	abstract decl.Decl {
 		PropertyDecl(name: String, type: Type)
 
 		TypeDecl(
@@ -19,14 +14,9 @@ de.clashsoft.gentreesrc.tree.Node {
 			properties: [PropertyDecl]
 			subTypes: [TypeDecl]
 		)
-		/*```
-		<packageName>.<className>(<properties, ...>) {
-			<subTypes\n...>
-		}
-		```*/
 	}
 
-	type.Type {
+	abstract type.Type {
 		NamedType(name: String, args: [Type]?)
 		ListType(elementType: Type)
 		MapType(keyType: Type, valueType: Type)
