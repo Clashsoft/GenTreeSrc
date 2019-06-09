@@ -48,7 +48,8 @@ nonOptionalType:
 	mapType
 	;
 
-namedType: name=IDENTIFIER;
+namedType: name=IDENTIFIER genericArguments?;
+genericArguments: '<' (type ','?)* '>';
 listType: '[' elementType=type ']';
 mapType: '[' keyType=type ':' valueType=type ']';
 optionalType: nonOptionalType '?';

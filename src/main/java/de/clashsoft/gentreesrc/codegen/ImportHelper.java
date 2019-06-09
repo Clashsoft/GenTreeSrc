@@ -78,6 +78,13 @@ public class ImportHelper
 			public Void visitNamedType(NamedType namedType, Void par)
 			{
 				addImport(importMap, decl, imports, namedType.getName());
+				if (namedType.getArgs() != null)
+				{
+					for (final Type arg : namedType.getArgs())
+					{
+						arg.accept(this, par);
+					}
+				}
 				return null;
 			}
 

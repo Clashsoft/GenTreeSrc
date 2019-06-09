@@ -113,7 +113,7 @@ type_<type.class.enclosingClass.simpleName>
 %>
 
 type_NamedType(type) ::= <%
-<type.name>
+<type.name><if(type.args)>\<<type.args:type(); separator=", ">><endif>
 %>
 
 type_ListType(type) ::= <%

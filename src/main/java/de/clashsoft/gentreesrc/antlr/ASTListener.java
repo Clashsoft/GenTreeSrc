@@ -1,6 +1,7 @@
 package de.clashsoft.gentreesrc.antlr;
 
 import de.clashsoft.gentreesrc.tree.DefinitionFile;
+import de.clashsoft.gentreesrc.tree.Node;
 import de.clashsoft.gentreesrc.tree.decl.*;
 import de.clashsoft.gentreesrc.tree.type.*;
 import org.antlr.v4.runtime.CharStreams;
@@ -8,9 +9,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import java.io.IOException;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
+import java.util.*;
 
 public class ASTListener extends GenTreeSrcBaseListener
 {
@@ -20,7 +19,7 @@ public class ASTListener extends GenTreeSrcBaseListener
 
 	private TypeDecl currentDeclaration;
 
-	private Deque<Type> type = new ArrayDeque<>(2);
+	private Deque<Node> stack = new ArrayDeque<>(2);
 
 	// =============== Constructors ===============
 
@@ -44,6 +43,29 @@ public class ASTListener extends GenTreeSrcBaseListener
 	}
 
 	// =============== Methods ===============
+
+	// =============== Methods ===============
+
+	private <T extends Node> void push(T value)
+	{
+		this.stack.push(value);
+	}
+
+	private <T> T pop()
+	{
+		return (T) this.stack.pop();
+	}
+
+	private <T> List<T> pop(Class<T> type, int count)
+	{
+		// strange logic, but end result is that the top of the stack ends up at the end of the list.
+		final List<T> result = new ArrayList<>(Collections.nCopies(count, null));
+		for (int i = count - 1; i >= 0; i--)
+		{
+			result.set(i, type.cast(this.stack.pop()));
+		}
+		return result;
+	}
 
 	@Override
 	public void enterImportDeclaration(GenTreeSrcParser.ImportDeclarationContext ctx)
@@ -117,7 +139,7 @@ public class ASTListener extends GenTreeSrcBaseListener
 	public void exitProperty(GenTreeSrcParser.PropertyContext ctx)
 	{
 		final String name = ctx.name.getText();
-		final PropertyDecl property = PropertyDecl.of(name, this.type.pop());
+		final PropertyDecl property = PropertyDecl.of(name, this.pop());
 		this.currentDeclaration.getProperties().add(property);
 	}
 
@@ -127,27 +149,37 @@ public class ASTListener extends GenTreeSrcBaseListener
 	public void exitNamedType(GenTreeSrcParser.NamedTypeContext ctx)
 	{
 		final String name = ctx.name.getText();
-		this.type.push(NamedType.of(name));
+		final List<Type> args;
+		final GenTreeSrcParser.GenericArgumentsContext genericArguments = ctx.genericArguments();
+		if (genericArguments != null)
+		{
+			args = this.pop(Type.class, genericArguments.type().size());
+		}
+		else
+		{
+			args = null;
+		}
+		this.push(NamedType.of(name, args));
 	}
 
 	@Override
 	public void exitListType(GenTreeSrcParser.ListTypeContext ctx)
 	{
-		this.type.push(ListType.of(this.type.pop()));
+		this.push(ListType.of(this.pop()));
 	}
 
 	@Override
 	public void exitMapType(GenTreeSrcParser.MapTypeContext ctx)
 	{
-		final Type valueType = this.type.pop();
-		final Type keyType = this.type.pop();
-		this.type.push(MapType.of(keyType, valueType));
+		final Type valueType = this.pop();
+		final Type keyType = this.pop();
+		this.push(MapType.of(keyType, valueType));
 	}
 
 	@Override
 	public void exitOptionalType(GenTreeSrcParser.OptionalTypeContext ctx)
 	{
-		this.type.push(OptionalType.of(this.type.pop()));
+		this.push(OptionalType.of(this.pop()));
 	}
 
 	@Override
