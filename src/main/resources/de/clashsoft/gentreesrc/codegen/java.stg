@@ -9,7 +9,7 @@ package <typeDecl.packageName>;
 
 public interface <typeDecl.className><if(typeDecl.superType)> extends <typeDecl.superType.className><endif>
 {
-	<if(!typeDecl.attributes.isAbstract)>
+	<if(!typeDecl.attributes.abstract)>
 	// =============== Static Methods ===============
 	static <typeDecl.className> of(<typeDecl.properties:parameter(); separator=", ">) { return new Impl(<typeDecl.properties:argument(); separator=", ">); }
 	<endif>
@@ -20,7 +20,7 @@ public interface <typeDecl.className><if(typeDecl.superType)> extends <typeDecl.
 	// =============== Methods ===============
 	<visitTypes(config)> <visitRet(config)> accept(<typeDecl.className>.Visitor<visitTypes(config)> visitor<visitPar(config)>);
 	// =============== Classes ===============
-	<if(!typeDecl.attributes.isAbstract)>
+	<if(!typeDecl.attributes.abstract)>
 	class Impl<extends_(typeDecl.superType)> implements <typeDecl.className>
 	{
 		<if(typeDecl.properties)>
@@ -81,7 +81,7 @@ visitPar(config) ::= <%
 
 extends_(typeDecl) ::= <%
 <if(!typeDecl)>
-<elseif(!typeDecl.attributes.isAbstract)> extends <typeDecl.className>.Impl
+<elseif(!typeDecl.attributes.abstract)> extends <typeDecl.className>.Impl
 <else><extends_(typeDecl.superType)>
 <endif>
 %>
