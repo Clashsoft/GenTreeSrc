@@ -43,3 +43,8 @@
 + Added support for named types with generic arguments. #20
 + Added the `import` type declaration modifier that prevents code generation. #19
 * Import declarations are now treated like type declarations. #19
+
+# GenTreeSrc v0.7.0
+
++ Added Array Types. #22
+* Fixed `abstract` type declarations generating `Impl` classes. #21
