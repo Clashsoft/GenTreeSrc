@@ -116,6 +116,10 @@ type_NamedType(type) ::= <%
 <type.name><if(type.args)>\<<type.args:type(); separator=", ">><endif>
 %>
 
+type_ArrayType(type) ::= <%
+<type(type.elementType)>[]
+%>
+
 type_ListType(type) ::= <%
 List\<<type(type.elementType)>>
 %>

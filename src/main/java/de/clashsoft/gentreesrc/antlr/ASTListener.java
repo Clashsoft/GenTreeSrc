@@ -166,7 +166,13 @@ public class ASTListener extends GenTreeSrcBaseListener
 	}
 
 	@Override
-	public void exitOptionalType(GenTreeSrcParser.OptionalTypeContext ctx)
+	public void exitArrayTypeSuffix(GenTreeSrcParser.ArrayTypeSuffixContext ctx)
+	{
+		this.push(ArrayType.of(this.pop()));
+	}
+
+	@Override
+	public void exitOptionalTypeSuffix(GenTreeSrcParser.OptionalTypeSuffixContext ctx)
 	{
 		this.push(OptionalType.of(this.pop()));
 	}

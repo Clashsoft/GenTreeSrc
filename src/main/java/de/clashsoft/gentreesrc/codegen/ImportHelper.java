@@ -83,6 +83,12 @@ public class ImportHelper
 			}
 
 			@Override
+			public Void visit(ArrayType arrayType, Void par)
+			{
+				return arrayType.getElementType().accept(this, par);
+			}
+
+			@Override
 			public Void visit(ListType listType, Void par)
 			{
 				imports.add("java.util.List");

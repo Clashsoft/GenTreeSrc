@@ -18,6 +18,7 @@ abstract de.clashsoft.gentreesrc.tree.Node {
 
 	abstract type.Type {
 		NamedType(name: String, args: [Type]?)
+		ArrayType(elementType: Type)
 		ListType(elementType: Type)
 		MapType(keyType: Type, valueType: Type)
 		OptionalType(wrappedType: Type)

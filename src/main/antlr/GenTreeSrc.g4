@@ -30,12 +30,10 @@ property:
 // --------------- Types ---------------
 
 type:
-	nonOptionalType
-	|
-	optionalType
+	primaryType typeSuffix*
 	;
 
-nonOptionalType:
+primaryType:
 	namedType
 	|
 	listType
@@ -47,7 +45,10 @@ namedType: name=IDENTIFIER genericArguments?;
 genericArguments: '<' (type ','?)* '>';
 listType: '[' elementType=type ']';
 mapType: '[' keyType=type ':' valueType=type ']';
-optionalType: nonOptionalType '?';
+
+typeSuffix: optionalTypeSuffix | arrayTypeSuffix;
+optionalTypeSuffix: '?';
+arrayTypeSuffix: '[' ']';
 
 packageName: (IDENTIFIER '.')*;
 
