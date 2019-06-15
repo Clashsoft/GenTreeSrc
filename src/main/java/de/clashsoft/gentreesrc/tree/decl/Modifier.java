@@ -2,7 +2,13 @@ package de.clashsoft.gentreesrc.tree.decl;
 
 public enum Modifier
 {
-	ABSTRACT(1), IMPORT(2), DELEGATE(4);
+	// types
+	ABSTRACT(1),
+	IMPORT(2),
+	// properties
+	DELEGATE(4),
+	READONLY(8),
+	;
 
 	private final int flag;
 

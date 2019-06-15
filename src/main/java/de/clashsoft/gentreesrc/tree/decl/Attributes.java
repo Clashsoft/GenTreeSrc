@@ -38,5 +38,6 @@ public class Attributes
 	public boolean isAbstract() { return this.hasModifier(Modifier.ABSTRACT); }
 	public boolean isImport() { return this.hasModifier(Modifier.IMPORT); }
 	public boolean isDelegate() { return this.hasModifier(Modifier.DELEGATE); }
+	public boolean isReadonly() { return this.hasModifier(Modifier.READONLY); }
 	// @formatter:on
 }
