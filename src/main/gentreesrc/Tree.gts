@@ -4,7 +4,11 @@ abstract de.clashsoft.gentreesrc.tree.Node {
 	DefinitionFile(declarations: [TypeDecl])
 
 	abstract decl.Decl {
-		PropertyDecl(name: String, type: Type)
+		PropertyDecl(
+			attributes: Attributes
+			name: String
+			type: Type
+		)
 
 		TypeDecl(
 			attributes: Attributes
