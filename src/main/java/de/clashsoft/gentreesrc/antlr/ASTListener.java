@@ -134,6 +134,10 @@ public class ASTListener extends GenTreeSrcBaseListener
 			{
 				attributes.add(Modifier.DELEGATE);
 			}
+			else if (modCtx.READONLY() != null)
+			{
+				attributes.add(Modifier.READONLY);
+			}
 		}
 
 		final String name = ctx.name.getText();

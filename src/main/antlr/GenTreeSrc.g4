@@ -27,7 +27,7 @@ property:
 	propertyModifier* type name=IDENTIFIER
 	;
 
-propertyModifier: DELEGATE;
+propertyModifier: DELEGATE | READONLY;
 
 // --------------- Types ---------------
 
@@ -59,6 +59,7 @@ packageName: (IDENTIFIER '.')*;
 ABSTRACT: 'abstract';
 IMPORT: 'import';
 DELEGATE: 'delegate';
+READONLY: 'readonly';
 
 IDENTIFIER: [a-zA-Z_][a-zA-Z0-9]*;
 
