@@ -8,6 +8,7 @@ public enum Modifier
 	// properties
 	DELEGATE(4),
 	READONLY(8),
+	NOCONSTRUCT(16),
 	;
 
 	private final int flag;
