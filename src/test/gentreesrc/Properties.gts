@@ -4,4 +4,5 @@ org.test.properties.Person(
 	lastName: String
 	delegate fullName: String
 	readonly delegate idString: String
+	noconstruct tag: String
 )

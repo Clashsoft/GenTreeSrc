@@ -18,5 +18,9 @@ public class PersonTest
 		assertEquals("Bobson", person.getLastName());
 
 		assertEquals("p_cafebabe", person.getIdString());
+
+		person.setTag("family");
+
+		assertEquals("family", person.getTag());
 	}
 }
