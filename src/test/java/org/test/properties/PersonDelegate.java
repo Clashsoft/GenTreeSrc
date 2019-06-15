@@ -15,4 +15,9 @@ class PersonDelegate
 		person.setFirstName(fullName.substring(0, delim));
 		person.setLastName(fullName.substring(delim + 1));
 	}
+
+	static String getIdString(Person person)
+	{
+		return String.format("p_%08x", person.getId());
+	}
 }
