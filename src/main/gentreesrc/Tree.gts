@@ -10,7 +10,7 @@ abstract de.clashsoft.gentreesrc.tree.Node {
 			type: Type
 		)
 
-		TypeDecl(
+		import TypeDecl(
 			attributes: Attributes
 			packageName: String
 			className: String
