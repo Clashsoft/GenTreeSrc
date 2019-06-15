@@ -128,6 +128,14 @@ public class ASTListener extends GenTreeSrcBaseListener
 	public void exitProperty(GenTreeSrcParser.PropertyContext ctx)
 	{
 		final Attributes attributes = new Attributes();
+		for (final GenTreeSrcParser.PropertyModifierContext modCtx : ctx.propertyModifier())
+		{
+			if (modCtx.DELEGATE() != null)
+			{
+				attributes.add(Modifier.DELEGATE);
+			}
+		}
+
 		final String name = ctx.name.getText();
 		final PropertyDecl property = PropertyDecl.of(attributes, name, this.pop());
 		this.currentDeclaration.getProperties().add(property);

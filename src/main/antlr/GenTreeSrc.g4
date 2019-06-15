@@ -22,10 +22,12 @@ propertyList:
 	'(' (property ','?)* ')';
 
 property:
-	name=IDENTIFIER ':' type
+	propertyModifier* name=IDENTIFIER ':' type
 	|
-	type name=IDENTIFIER
+	propertyModifier* type name=IDENTIFIER
 	;
+
+propertyModifier: DELEGATE;
 
 // --------------- Types ---------------
 
@@ -56,6 +58,7 @@ packageName: (IDENTIFIER '.')*;
 
 ABSTRACT: 'abstract';
 IMPORT: 'import';
+DELEGATE: 'delegate';
 
 IDENTIFIER: [a-zA-Z_][a-zA-Z0-9]*;
 
