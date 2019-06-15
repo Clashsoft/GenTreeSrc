@@ -27,7 +27,7 @@ property:
 	propertyModifier* type name=IDENTIFIER
 	;
 
-propertyModifier: DELEGATE | READONLY;
+propertyModifier: DELEGATE | READONLY | NOCONSTRUCT;
 
 // --------------- Types ---------------
 
@@ -60,6 +60,7 @@ ABSTRACT: 'abstract';
 IMPORT: 'import';
 DELEGATE: 'delegate';
 READONLY: 'readonly';
+NOCONSTRUCT: 'noconstruct';
 
 IDENTIFIER: [a-zA-Z_][a-zA-Z0-9]*;
 

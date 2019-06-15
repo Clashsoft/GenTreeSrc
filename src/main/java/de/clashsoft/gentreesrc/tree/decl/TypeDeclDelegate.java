@@ -8,13 +8,15 @@ class TypeDeclDelegate
 {
 	private static List<PropertyDecl> filterProperties(TypeDecl impl, Predicate<PropertyDecl> predicate)
 	{
-		return impl.getProperties().stream().filter(predicate)
-		           .collect(Collectors.toList());
+		return impl.getProperties().stream().filter(predicate).collect(Collectors.toList());
 	}
 
 	static List<PropertyDecl> getConstructorProperties(TypeDecl typeDecl)
 	{
-		return filterProperties(typeDecl, it -> !it.getAttributes().isDelegate());
+		return filterProperties(typeDecl, it -> {
+			final Attributes attributes = it.getAttributes();
+			return !attributes.isDelegate() && !attributes.isNoconstruct();
+		});
 	}
 
 	static List<PropertyDecl> getStoredProperties(TypeDecl typeDecl)
