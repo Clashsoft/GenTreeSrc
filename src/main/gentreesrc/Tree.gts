@@ -11,12 +11,14 @@ abstract de.clashsoft.gentreesrc.tree.Node {
 			type: Type
 		)
 
-		import TypeDecl(
+		TypeDecl(
 			attributes: Attributes
 			packageName: String
 			className: String
 			superType: TypeDecl
 			properties: [PropertyDecl]
+			readonly delegate constructorProperties: [PropertyDecl]
+			readonly delegate storedProperties: [PropertyDecl]
 			subTypes: [TypeDecl]
 		)
 	}
