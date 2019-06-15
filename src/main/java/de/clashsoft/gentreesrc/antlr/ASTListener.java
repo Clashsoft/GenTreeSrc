@@ -137,7 +137,7 @@ public class ASTListener extends GenTreeSrcBaseListener
 		}
 
 		final String name = ctx.name.getText();
-		final PropertyDecl property = PropertyDecl.of(attributes, name, this.pop());
+		final PropertyDecl property = PropertyDecl.of(this.currentDeclaration, attributes, name, this.pop());
 		this.currentDeclaration.getProperties().add(property);
 	}
 

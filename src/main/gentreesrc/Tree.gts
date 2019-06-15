@@ -5,6 +5,7 @@ abstract de.clashsoft.gentreesrc.tree.Node {
 
 	abstract decl.Decl {
 		PropertyDecl(
+			owner: TypeDecl
 			attributes: Attributes
 			name: String
 			type: Type
