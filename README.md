@@ -28,7 +28,7 @@ repositories {
 dependencies {
 	// ...
 	// https://mvnrepository.com/artifact/de.clashsoft/gentreesrc
-	gentreesrc group: 'de.clashsoft', name: 'gentreesrc', version: '0.7.0'
+	gentreesrc group: 'de.clashsoft', name: 'gentreesrc', version: '0.8.0'
 	// ...
 }
 ```

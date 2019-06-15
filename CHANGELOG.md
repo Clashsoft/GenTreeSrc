@@ -48,3 +48,9 @@
 
 + Added Array Types. #22
 * Fixed `abstract` type declarations generating `Impl` classes. #21
+
+# GenTreeSrc v0.8.0
+
++ Added the `readonly` property attribute. #23
++ Added the `noconstruct` property attribute. #24
++ Added the `delegate` property attribute. #25
