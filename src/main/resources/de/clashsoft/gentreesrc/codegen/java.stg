@@ -11,7 +11,7 @@ public interface <typeDecl.className><if(typeDecl.superType)> extends <typeDecl.
 {
 	<if(!typeDecl.attributes.abstract)>
 	// =============== Static Methods ===============
-	static <typeDecl.className> of(<typeDecl.properties:parameter(); separator=", ">) { return new Impl(<typeDecl.properties:argument(); separator=", ">); }
+	static <typeDecl.className> of(<typeDecl.constructorProperties:parameter(); separator=", ">) { return new Impl(<typeDecl.constructorProperties:argument(); separator=", ">); }
 	<endif>
 	<if(typeDecl.properties)>
 	// =============== Properties ===============
@@ -23,14 +23,14 @@ public interface <typeDecl.className><if(typeDecl.superType)> extends <typeDecl.
 	<if(!typeDecl.attributes.abstract)>
 	class Impl<extends_(typeDecl.superType)> implements <typeDecl.className>
 	{
-		<if(typeDecl.properties)>
+		<if(typeDecl.storedProperties)>
 		// =============== Fields ===============
-		<typeDecl.properties:field()>
+		<typeDecl.storedProperties:field()>
 		// =============== Constructors ===============
 		public Impl() {}
-		public Impl(<typeDecl.properties:parameter(); separator=", ">)
+		public Impl(<typeDecl.constructorProperties:parameter(); separator=", ">)
 		{
-			<typeDecl.properties:setThis(); separator="\n">
+			<typeDecl.constructorProperties:setThis(); separator="\n">
 		}
 
 		// =============== Properties ===============
