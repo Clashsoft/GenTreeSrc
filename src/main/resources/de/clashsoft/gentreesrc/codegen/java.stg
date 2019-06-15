@@ -30,7 +30,7 @@ public interface <typeDecl.className><if(typeDecl.superType)> extends <typeDecl.
 		public Impl() {}
 		public Impl(<typeDecl.constructorProperties:parameter(); separator=", ">)
 		{
-			<typeDecl.constructorProperties:setThis(); separator="\n">
+			<typeDecl.constructorProperties:setField(); separator="\n">
 		}
 
 		// =============== Properties ===============
@@ -162,7 +162,7 @@ void set<property.name; format="cap">(<type(property.type)> <property.name>);
 
 >>
 
-setThis(property) ::= <%
+setField(property) ::= <%
 this.<property.name> = <property.name>;
 %>
 
@@ -172,11 +172,27 @@ getterSetterImpl(property) ::= <%
 %>
 
 getterImpl(property) ::= <<
-@Override public <type(property.type)> get<property.name; format="cap">() { return this.<property.name>; }
+@Override public <type(property.type)> get<property.name; format="cap">() { <getterBody(property)> }
 
 >>
+
+getterBody(property) ::= <%
+<if(property.attributes.delegate)>
+return <property.owner.className>Delegate.get<property.name; format="cap">(this);
+<else>
+return this.<property.name>;
+<endif>
+%>
 
 setterImpl(property) ::= <<
-@Override public void set<property.name; format="cap">(<parameter(property)>) { <setThis(property)> }
+@Override public void set<property.name; format="cap">(<parameter(property)>) { <setterBody(property)> }
 
 >>
+
+setterBody(property) ::= <%
+<if(property.attributes.delegate)>
+<property.owner.className>Delegate.set<property.name; format="cap">(this, <property.name>);
+<else>
+<setField(property)>
+<endif>
+%>
