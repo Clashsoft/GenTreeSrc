@@ -15,7 +15,7 @@ public interface <typeDecl.className><if(typeDecl.superType)> extends <typeDecl.
 	<endif>
 	<if(typeDecl.properties)>
 	// =============== Properties ===============
-	<typeDecl.properties:getterSetter()>
+	<typeDecl.properties:getterSetter(); separator="\n">
 	<endif>
 	// =============== Methods ===============
 	<acceptRecursively(config, typeDecl, typeDecl)>
@@ -25,16 +25,15 @@ public interface <typeDecl.className><if(typeDecl.superType)> extends <typeDecl.
 	{
 		<if(typeDecl.storedProperties)>
 		// =============== Fields ===============
-		<typeDecl.storedProperties:field()>
+		<typeDecl.storedProperties:field(); separator="\n">
 		// =============== Constructors ===============
 		public Impl() {}
 		public Impl(<typeDecl.constructorProperties:parameter(); separator=", ">)
 		{
 			<typeDecl.constructorProperties:setField(); separator="\n">
 		}
-
 		// =============== Properties ===============
-		<typeDecl.properties:getterSetterImpl()>
+		<typeDecl.storedProperties:getterSetterImpl(); separator="\n">
 		<endif>
 	}
 	<endif>
@@ -140,61 +139,54 @@ argument(property) ::= <%
 <property.name>
 %>
 
-field(property) ::= <<
+field(property) ::= <%
 private <type(property.type)> <property.name>;
-
->>
-
-getterSetter(property) ::= <%
-<getter(property)>
-<if(!property.attributes.readonly)>
-<setter(property)>
-<endif>
 %>
-
-getter(property) ::= <<
-<type(property.type)> get<property.name; format="cap">();
-
->>
-
-setter(property) ::= <<
-void set<property.name; format="cap">(<type(property.type)> <property.name>);
-
->>
 
 setField(property) ::= <%
 this.<property.name> = <property.name>;
 %>
 
+getterSetter(property) ::= <%
+<getter(property)>
+<if(!property.attributes.readonly)>
+<\n>
+<setter(property)>
+<endif>
+%>
+
+getter(property) ::= <%
+<if(property.attributes.delegate)>default <endif>
+<type(property.type)> get<property.name; format="cap">()
+<if(property.attributes.delegate)>
+{ return <property.owner.className>Delegate.get<property.name; format="cap">(this); }
+<else>
+;
+<endif>
+%>
+
+setter(property) ::= <%
+<if(property.attributes.delegate)>default <endif>
+void set<property.name; format="cap">(<type(property.type)> <property.name>)
+<if(property.attributes.delegate)>
+{ <property.owner.className>Delegate.set<property.name; format="cap">(this, <property.name>); }
+<else>
+;
+<endif>
+%>
+
 getterSetterImpl(property) ::= <%
 <getterImpl(property)>
 <if(!property.attributes.readonly)>
+<\n>
 <setterImpl(property)>
 <endif>
 %>
 
-getterImpl(property) ::= <<
-@Override public <type(property.type)> get<property.name; format="cap">() { <getterBody(property)> }
-
->>
-
-getterBody(property) ::= <%
-<if(property.attributes.delegate)>
-return <property.owner.className>Delegate.get<property.name; format="cap">(this);
-<else>
-return this.<property.name>;
-<endif>
+getterImpl(property) ::= <%
+@Override public <type(property.type)> get<property.name; format="cap">() { return this.<property.name>; }
 %>
 
-setterImpl(property) ::= <<
-@Override public void set<property.name; format="cap">(<parameter(property)>) { <setterBody(property)> }
-
->>
-
-setterBody(property) ::= <%
-<if(property.attributes.delegate)>
-<property.owner.className>Delegate.set<property.name; format="cap">(this, <property.name>);
-<else>
-<setField(property)>
-<endif>
+setterImpl(property) ::= <%
+@Override public void set<property.name; format="cap">(<parameter(property)>) { <setField(property)> }
 %>
