@@ -159,7 +159,7 @@ getter(property) ::= <%
 <if(property.attributes.delegate)>default <endif>
 <type(property.type)> get<property.name; format="cap">()
 <if(property.attributes.delegate)>
-{ return <property.owner.className>Delegate.get<property.name; format="cap">(this); }
+<\ >{ return <property.owner.className>Delegate.get<property.name; format="cap">(this); }
 <else>
 ;
 <endif>
@@ -169,7 +169,7 @@ setter(property) ::= <%
 <if(property.attributes.delegate)>default <endif>
 void set<property.name; format="cap">(<type(property.type)> <property.name>)
 <if(property.attributes.delegate)>
-{ <property.owner.className>Delegate.set<property.name; format="cap">(this, <property.name>); }
+<\ >{ <property.owner.className>Delegate.set<property.name; format="cap">(this, <property.name>); }
 <else>
 ;
 <endif>
