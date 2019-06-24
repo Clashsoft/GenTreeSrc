@@ -54,3 +54,10 @@
 + Added the `readonly` property attribute. #23
 + Added the `noconstruct` property attribute. #24
 + Added the `delegate` property attribute. #25
+
+# GenTreeSrc v0.9.0
+
++ Added the `--visit-default` option. #29
+* Reduced the number of blank lines in generated code.
+* The `accept` method is now implemented as a default method in the interface. #26
+* The getter and setter of delegate properties are now implemented as default methods in the interface. #27
