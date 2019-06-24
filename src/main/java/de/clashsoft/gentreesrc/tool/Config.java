@@ -18,6 +18,7 @@ public class Config
 	private boolean deleteOld;
 	private boolean visitPar;
 	private boolean visitRet;
+	private boolean visitDefault;
 
 	// =============== Properties ===============
 
@@ -76,6 +77,16 @@ public class Config
 		this.visitRet = visitRet;
 	}
 
+	public boolean isVisitDefault()
+	{
+		return this.visitDefault;
+	}
+
+	public void setVisitDefault(boolean visitDefault)
+	{
+		this.visitDefault = visitDefault;
+	}
+
 	// =============== Methods ===============
 
 	public Options createOptions()
@@ -100,6 +111,9 @@ public class Config
 			new Option(null, "visit-return", false, "make visit and accept methods return a generic type R (default)"));
 		options.addOption(new Option(null, "visit-void", false, "make visit and accept methods return void"));
 
+		options.addOption(new Option(null, "visit-default", false,
+		                             "visit methods generate default implementations that throw an UnsupportedOperationException"));
+
 		return options;
 	}
 
@@ -112,5 +126,7 @@ public class Config
 
 		this.setVisitPar(!cmd.hasOption("no-visit-par"));
 		this.setVisitRet(!cmd.hasOption("visit-void"));
+
+		this.setVisitDefault(cmd.hasOption("visit-default"));
 	}
 }
