@@ -86,7 +86,9 @@ visit(config, typeDecl) ::= <%
 <if(config.visitDefault)>default <endif>
 <visitRet(config)> visit(<typeDecl.className> <typeDecl.className; format="decap"><visitPar(config)>)
 <if(config.visitDefault)>
-<\ >{ throw new UnsupportedOperationException(this.getClass().getName() + ".visit(<typeDecl.className>)"); }
+<\ >{ throw new UnsupportedOperationException(
+this.getClass().getName() + ".visit(" + <typeDecl.className; format="decap">.getClass().getName() + ")"
+); }
 <else>
 ;
 <endif>
