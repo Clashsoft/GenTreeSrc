@@ -44,6 +44,9 @@ public interface <typeDecl.className><if(typeDecl.superType)> extends <typeDecl.
 	{
 		// =============== Methods ===============
 		<visit(config, typeDecl)>
+		<if(config.visitParent)>
+		<typeDecl.subTypes:visitParent(config, typeDecl); separator="\n">
+		<endif>
 	}
 }
 
@@ -87,6 +90,13 @@ visit(config, typeDecl) ::= <%
 <else>
 ;
 <endif>
+%>
+
+visitParent(subTypeDecl, config, typeDecl) ::= <%
+@Override default <visitRet(config)> visit(
+<subTypeDecl.className> <subTypeDecl.className; format="decap"><visitPar(config)>
+) { <if(config.visitRet)>return <endif>
+this.visit((<typeDecl.className>) <subTypeDecl.className; format="decap"><if(config.visitPar)>, par<endif>); }
 %>
 
 extends_(typeDecl) ::= <%
