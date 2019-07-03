@@ -61,3 +61,8 @@
 * Reduced the number of blank lines in generated code.
 * The `accept` method is now implemented as a default method in the interface. #26
 * The getter and setter of delegate properties are now implemented as default methods in the interface. #27
+
+# GenTreeSrc v0.10.0
+
++ Added the `--visit-parent` option. #30
+* The `--visit-default` exception message now shows the runtime type of the argument.
