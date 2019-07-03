@@ -19,6 +19,7 @@ public class Config
 	private boolean visitPar;
 	private boolean visitRet;
 	private boolean visitDefault;
+	private boolean visitParent;
 
 	// =============== Properties ===============
 
@@ -87,6 +88,16 @@ public class Config
 		this.visitDefault = visitDefault;
 	}
 
+	public boolean isVisitParent()
+	{
+		return this.visitParent;
+	}
+
+	public void setVisitParent(boolean visitParent)
+	{
+		this.visitParent = visitParent;
+	}
+
 	// =============== Methods ===============
 
 	public Options createOptions()
@@ -114,6 +125,9 @@ public class Config
 		options.addOption(new Option(null, "visit-default", false,
 		                             "visit methods generate default implementations that throw an UnsupportedOperationException"));
 
+		options.addOption(new Option(null, "visit-parent", false,
+		                             "visit methods generate default implementations that delegate to the visit method of the parent class"));
+
 		return options;
 	}
 
@@ -128,5 +142,6 @@ public class Config
 		this.setVisitRet(!cmd.hasOption("visit-void"));
 
 		this.setVisitDefault(cmd.hasOption("visit-default"));
+		this.setVisitParent(cmd.hasOption("visit-parent"));
 	}
 }
