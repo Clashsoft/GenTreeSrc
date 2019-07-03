@@ -75,6 +75,17 @@ finally {
 // override test task classpath with newest version (this one)
 gentreesrcTestJava.classpath = sourceSets.main.runtimeClasspath
 
+// --------------- Resources ---------------
+
+processResources {
+	filesMatching('**/*.stg') {
+		filter {
+			it = it.replace('$$version$$', version.toString())
+			it
+		}
+	}
+}
+
 // --------------- ANTLR ---------------
 
 def generatedANTLRDir = "$buildDir/generated-src/antlr/main/"
