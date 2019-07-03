@@ -7,9 +7,9 @@ plugins {
 	id 'de.clashsoft.gentreesrc-gradle' version '0.3.0'
 }
 
-group 'de.clashsoft'
-version '0.9.0'
-description 'A tool that generates Tree and Visitor classes from an AST model description file.'
+group = 'de.clashsoft'
+version = 'git describe --tags'.execute().text[1..-2] // strip v and \n
+description = 'A tool that generates Tree and Visitor classes from an AST model description file.'
 
 publishInfo {
 	websiteUrl = 'https://github.com/Clashsoft/gentreesrc'
