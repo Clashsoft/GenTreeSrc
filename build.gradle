@@ -96,5 +96,21 @@ finally {
 	project.group = oldGroup
 }
 
-// override test task classpath with newest version (this one)
-gentreesrcTestJava.classpath = sourceSets.main.runtimeClasspath
+def taskName = 'gentreesrcTestJavaNew'
+def inputDir = 'src/test/gentreesrc'
+def outputDir = "$buildDir/generated-src/gentreesrc/test/java/"
+
+// override test task with custom classpath and as a JavaExec, to make it debuggable.
+tasks.register(taskName, JavaExec) {
+	main = 'de.clashsoft.gentreesrc.Main'
+	classpath = sourceSets.main.runtimeClasspath
+	args = [ inputDir, '-o', outputDir, '--delete-old' ]
+
+	inputs.dir(inputDir)
+	outputs.dir(outputDir)
+}
+
+tasks.named('gentreesrcTestJava') {
+	enabled = false
+	dependsOn taskName
+}
