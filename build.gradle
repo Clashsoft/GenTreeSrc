@@ -38,12 +38,6 @@ repositories {
 	jcenter()
 }
 
-configurations {
-	compile {
-		extendsFrom = extendsFrom.findAll { it != configurations.antlr }
-	}
-}
-
 dependencies {
 	gentreesrc group: 'de.clashsoft', name: 'gentreesrc', version: '0.8.0'
 
@@ -62,19 +56,6 @@ dependencies {
 	compile group: 'commons-cli', name: 'commons-cli', version: '1.4'
 }
 
-// https://github.com/gradle/gradle/issues/7706#issuecomment-470999724
-def oldGroup = project.group
-try {
-	project.group = 'dummy_group_for_bootstrap'
-	configurations.gentreesrc.files
-}
-finally {
-	project.group = oldGroup
-}
-
-// override test task classpath with newest version (this one)
-gentreesrcTestJava.classpath = sourceSets.main.runtimeClasspath
-
 // --------------- Resources ---------------
 
 processResources {
@@ -92,9 +73,28 @@ def generatedANTLRDir = "$buildDir/generated-src/antlr/main/"
 
 sourceSets.main.java.srcDir(generatedANTLRDir)
 
+configurations.compile {
+	extendsFrom = extendsFrom.findAll { it != configurations.antlr }
+}
+
 // https://stackoverflow.com/questions/40995727/gradle-cant-find-antlr-token-file
 generateGrammarSource {
 	def packageName = 'de.clashsoft.gentreesrc.antlr'
 	arguments += [ '-package', packageName ]
 	outputDirectory = file("$generatedANTLRDir/${ packageName.replace('.', '/') }/")
 }
+
+// --------------- GenTreeSrc ---------------
+
+// https://github.com/gradle/gradle/issues/7706#issuecomment-470999724
+def oldGroup = project.group
+try {
+	project.group = 'dummy_group_for_bootstrap'
+	configurations.gentreesrc.files
+}
+finally {
+	project.group = oldGroup
+}
+
+// override test task classpath with newest version (this one)
+gentreesrcTestJava.classpath = sourceSets.main.runtimeClasspath
