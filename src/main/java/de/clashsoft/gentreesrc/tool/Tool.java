@@ -101,6 +101,12 @@ public class Tool implements javax.tools.Tool
 	{
 		final Set<File> generatedFiles = new HashSet<>();
 
+		if (this.config.getInputDirs().isEmpty())
+		{
+			this.out.println("no input files specified. aborting.");
+			return 1;
+		}
+
 		for (String inputDirName : this.config.getInputDirs())
 		{
 			final File inputFile = new File(inputDirName);
