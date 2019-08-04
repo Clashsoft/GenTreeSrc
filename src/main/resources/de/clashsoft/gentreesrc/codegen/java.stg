@@ -31,10 +31,12 @@ public interface <typeDecl.className><if(typeDecl.superType)> extends <typeDecl.
 		<typeDecl.storedProperties:field(); separator="\n">
 		// =============== Constructors ===============
 		public Impl() {}
+		<if(typeDecl.constructorProperties)>
 		public Impl(<typeDecl.constructorProperties:parameter(); separator=", ">)
 		{
 			<typeDecl.constructorProperties:setField(); separator="\n">
 		}
+		<endif>
 		// =============== Properties ===============
 		<typeDecl.storedProperties:getterSetterImpl(); separator="\n">
 		<endif>

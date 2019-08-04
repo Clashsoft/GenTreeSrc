@@ -6,3 +6,6 @@ org.test.properties.Person(
 	readonly delegate idString: String
 	noconstruct tag: String
 )
+
+// #31 Duplicate no-args constructor if all properties are noconstruct
+org.test.properties.NoConstruct(noconstruct i: int)
