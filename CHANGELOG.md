@@ -66,3 +66,8 @@
 
 + Added the `--visit-parent` option. #30
 * The `--visit-default` exception message now shows the runtime type of the argument.
+
+# GenTreeSrc v0.10.1
+
+* The java template no longer generates a duplicate no-args constructor if all properties are `noconstruct`. #31
+* The tool now exits with 1 if no input files are specified.
