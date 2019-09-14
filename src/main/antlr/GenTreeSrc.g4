@@ -19,7 +19,7 @@ subtypeList:
 // --------------- Properties ---------------
 
 propertyList:
-	'(' (property ','?)* ')';
+	'(' ((property | method) ','?)* ')';
 
 property:
 	propertyModifier* name=IDENTIFIER ':' type
@@ -28,6 +28,16 @@ property:
 	;
 
 propertyModifier: DELEGATE | READONLY | NOCONSTRUCT;
+
+// --------------- Methods ---------------
+
+method:
+	name=IDENTIFIER '(' (parameter ','?)* ')' ':' type
+	;
+
+parameter:
+	name=IDENTIFIER ':' type
+	;
 
 // --------------- Types ---------------
 
@@ -61,6 +71,7 @@ IMPORT: 'import';
 DELEGATE: 'delegate';
 READONLY: 'readonly';
 NOCONSTRUCT: 'noconstruct';
+FINAL: 'final';
 
 IDENTIFIER: [a-zA-Z_][a-zA-Z0-9]*;
 
