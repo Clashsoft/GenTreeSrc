@@ -22,6 +22,7 @@ public interface <typeDecl.className><if(typeDecl.superType)> extends <typeDecl.
 	<endif>
 	// =============== Methods ===============
 	<acceptRecursively(config, typeDecl, typeDecl)>
+	<typeDecl.methods:method(); separator="\n">
 	// =============== Classes ===============
 	<if(!typeDecl.attributes.abstract)>
 	class Impl<extends_(typeDecl.superType)> implements <typeDecl.className>
@@ -216,4 +217,17 @@ getterImpl(property) ::= <%
 
 setterImpl(property) ::= <%
 @Override public void set<property.name; format="cap">(<parameter(property)>) { <setField(property)> }
+%>
+
+// --------------- Methods ---------------
+
+method(method) ::= <%
+default <type(method.type)> <method.name>(
+<method.parameters:parameter(); separator=", ">
+) { return <method.owner.className>Delegate.<method.name>(
+this
+<if(method.parameters)>
+, <method.parameters:argument(); separator=", ">
+<endif>
+); }
 %>
