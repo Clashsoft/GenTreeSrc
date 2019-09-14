@@ -23,4 +23,16 @@ class TypeDeclDelegate
 	{
 		return filterProperties(typeDecl, it -> !it.getAttributes().isDelegate());
 	}
+
+	public static List<MethodDecl> getMethods(TypeDecl typeDecl)
+	{
+		return typeDecl.getMembers().stream().filter(m -> m instanceof MethodDecl).map(m -> (MethodDecl) m)
+		               .collect(Collectors.toList());
+	}
+
+	public static List<PropertyDecl> getProperties(TypeDecl typeDecl)
+	{
+		return typeDecl.getMembers().stream().filter(m -> m instanceof PropertyDecl).map(m -> (PropertyDecl) m)
+		               .collect(Collectors.toList());
+	}
 }

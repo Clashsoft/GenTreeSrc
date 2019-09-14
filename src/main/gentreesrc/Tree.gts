@@ -4,22 +4,41 @@ abstract de.clashsoft.gentreesrc.tree.Node {
 	DefinitionFile(declarations: [TypeDecl])
 
 	abstract decl.Decl {
-		PropertyDecl(
-			owner: TypeDecl
-			attributes: Attributes
-			name: String
-			type: Type
-		)
-
 		TypeDecl(
 			attributes: Attributes
 			packageName: String
 			className: String
 			superType: TypeDecl
-			properties: [PropertyDecl]
+			members: [TypeMemberDecl]
+			readonly delegate methods: [MethodDecl]
+			readonly delegate properties: [PropertyDecl]
 			readonly delegate constructorProperties: [PropertyDecl]
 			readonly delegate storedProperties: [PropertyDecl]
 			subTypes: [TypeDecl]
+		)
+
+		abstract TypeMemberDecl(owner: TypeDecl, attributes: Attributes, name: String, type: Type) {
+			PropertyDecl(
+				owner: TypeDecl
+				attributes: Attributes
+				name: String
+				type: Type
+			)
+
+			MethodDecl(
+				owner: TypeDecl
+				attributes: Attributes
+				name: String
+				parameters: [ParameterDecl]
+				type: Type
+			)
+		}
+
+		ParameterDecl(
+			owner: MethodDecl
+			attributes: Attributes
+			name: String
+			type: Type
 		)
 	}
 
