@@ -1,8 +1,10 @@
 package de.clashsoft.gentreesrc.codegen;
 
 import de.clashsoft.gentreesrc.tree.DefinitionFile;
-import de.clashsoft.gentreesrc.tree.decl.PropertyDecl;
+import de.clashsoft.gentreesrc.tree.decl.MethodDecl;
+import de.clashsoft.gentreesrc.tree.decl.ParameterDecl;
 import de.clashsoft.gentreesrc.tree.decl.TypeDecl;
+import de.clashsoft.gentreesrc.tree.decl.TypeMemberDecl;
 import de.clashsoft.gentreesrc.tree.type.*;
 
 import java.util.Map;
@@ -47,9 +49,16 @@ public class ImportHelper
 	{
 		addImport(decl, imports, current);
 
-		for (PropertyDecl property : decl.getProperties())
+		for (final TypeMemberDecl member : decl.getMembers())
 		{
-			addImport(importMap, decl, imports, property.getType());
+			addImport(importMap, decl, imports, member.getType());
+			if (member instanceof MethodDecl)
+			{
+				for (final ParameterDecl parameter : ((MethodDecl) member).getParameters())
+				{
+					addImport(importMap, decl, imports, parameter.getType());
+				}
+			}
 		}
 
 		for (TypeDecl subType : current.getSubTypes())

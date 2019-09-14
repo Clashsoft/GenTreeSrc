@@ -151,6 +151,28 @@ public class ASTListener extends GenTreeSrcBaseListener
 		this.currentDeclaration.getProperties().add(property);
 	}
 
+	// --------------- Methods ---------------
+
+	@Override
+	public void exitMethod(GenTreeSrcParser.MethodContext ctx)
+	{
+		final Type type = this.pop();
+		final List<ParameterDecl> params = this.pop(ParameterDecl.class, ctx.parameter().size());
+		final String name = ctx.name.getText();
+		final Attributes attributes = new Attributes();
+		final MethodDecl methodDecl = MethodDecl.of(this.currentDeclaration, attributes, name, params, type);
+		this.currentDeclaration.getMembers().add(methodDecl);
+	}
+
+	@Override
+	public void exitParameter(GenTreeSrcParser.ParameterContext ctx)
+	{
+		final Type type = this.pop();
+		final String name = ctx.name.getText();
+		final ParameterDecl parameterDecl = ParameterDecl.of(null, new Attributes(), name, type);
+		this.push(parameterDecl);
+	}
+
 	// --------------- Types ---------------
 
 	@Override
