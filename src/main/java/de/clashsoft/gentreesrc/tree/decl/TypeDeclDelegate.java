@@ -15,7 +15,7 @@ class TypeDeclDelegate
 	{
 		return filterProperties(typeDecl, it -> {
 			final Attributes attributes = it.getAttributes();
-			return !attributes.isDelegate() && !attributes.isNoconstruct();
+			return !attributes.isDelegate() && !attributes.isNoconstruct() && !attributes.isLazy();
 		});
 	}
 

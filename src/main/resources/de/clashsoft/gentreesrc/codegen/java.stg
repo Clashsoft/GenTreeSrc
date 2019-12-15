@@ -183,9 +183,9 @@ getterSetter(property) ::= <%
 %>
 
 getter(property) ::= <%
-<if(property.attributes.delegate)>default <endif>
+<if(property.attributes.delegateGetter)>default <endif>
 <type(property.type)> get<property.name; format="cap">()
-<if(property.attributes.delegate)>
+<if(property.attributes.delegateGetter)>
 <\ >{ return <property.owner.className>Delegate.get<property.name; format="cap">(this); }
 <else>
 ;
@@ -193,9 +193,9 @@ getter(property) ::= <%
 %>
 
 setter(property) ::= <%
-<if(property.attributes.delegate)>default <endif>
+<if(property.attributes.delegateSetter)>default <endif>
 void set<property.name; format="cap">(<type(property.type)> <property.name>)
-<if(property.attributes.delegate)>
+<if(property.attributes.delegateSetter)>
 <\ >{ <property.owner.className>Delegate.set<property.name; format="cap">(this, <property.name>); }
 <else>
 ;

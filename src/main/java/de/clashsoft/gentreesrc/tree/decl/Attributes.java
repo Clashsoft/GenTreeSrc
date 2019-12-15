@@ -42,4 +42,14 @@ public class Attributes
 	public boolean isNoconstruct() { return this.hasModifier(Modifier.NOCONSTRUCT); }
 	public boolean isLazy() { return this.hasModifier(Modifier.LAZY); }
 	// @formatter:on
+
+	public boolean isDelegateGetter()
+	{
+		return this.isDelegate() || this.isLazy();
+	}
+
+	public boolean isDelegateSetter()
+	{
+		return this.isDelegate();
+	}
 }
