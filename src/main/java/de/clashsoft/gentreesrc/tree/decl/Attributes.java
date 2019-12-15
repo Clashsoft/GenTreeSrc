@@ -40,5 +40,6 @@ public class Attributes
 	public boolean isDelegate() { return this.hasModifier(Modifier.DELEGATE); }
 	public boolean isReadonly() { return this.hasModifier(Modifier.READONLY); }
 	public boolean isNoconstruct() { return this.hasModifier(Modifier.NOCONSTRUCT); }
+	public boolean isLazy() { return this.hasModifier(Modifier.LAZY); }
 	// @formatter:on
 }

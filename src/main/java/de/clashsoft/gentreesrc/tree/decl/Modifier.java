@@ -9,6 +9,7 @@ public enum Modifier
 	DELEGATE(4),
 	READONLY(8),
 	NOCONSTRUCT(16),
+	LAZY(32),
 	;
 
 	private final int flag;
