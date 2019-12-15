@@ -142,6 +142,9 @@ public class ASTListener extends GenTreeSrcBaseListener
 			case GenTreeSrcLexer.NOCONSTRUCT:
 				attributes.add(Modifier.NOCONSTRUCT);
 				break;
+			case GenTreeSrcLexer.LAZY:
+				attributes.add(Modifier.LAZY);
+				break;
 			}
 		}
 
