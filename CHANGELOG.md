@@ -71,3 +71,10 @@
 
 * The java template no longer generates a duplicate no-args constructor if all properties are `noconstruct`. #31
 * The tool now exits with 1 if no input files are specified.
+
+# GenTreeSrc v0.10.2
+
+## Improvements
+
+* Updated third-party dependencies. #34
+* Improved performance of parsing modifiers. #35
