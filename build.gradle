@@ -2,34 +2,17 @@ plugins {
 	id 'java'
 	id 'antlr'
 	id 'maven-publish'
-	id 'com.jfrog.bintray' version '1.8.4'
-	id 'de.clashsoft.simple-publish' version '0.2.0'
+	// https://plugins.gradle.org/plugin/com.bmuschko.nexus
+	id 'com.bmuschko.nexus' version '2.3.1'
+	// https://plugins.gradle.org/plugin/io.codearte.nexus-staging
+	id 'io.codearte.nexus-staging' version '0.22.0'
+	// https://plugins.gradle.org/plugin/de.clashsoft.gentreesrc-gradle
 	id 'de.clashsoft.gentreesrc-gradle' version '0.8.0'
 }
 
 group = 'de.clashsoft'
 version = 'git describe --tags'.execute().text[1..-2] // strip v and \n
 description = 'A tool that generates Tree and Visitor classes from an AST model description file.'
-
-publishInfo {
-	websiteUrl = 'https://github.com/Clashsoft/gentreesrc'
-	issueTrackerUrl = 'https://github.com/Clashsoft/gentreesrc/issues'
-	vcsUrl = 'https://github.com/Clashsoft/gentreesrc'
-	githubRepo = 'Clashsoft/gentreesrc'
-	labels = [ 'source', 'generator', 'tree', 'ast' ]
-
-	license {
-		shortName 'BSD 3-Clause'
-		longName 'BSD 3-Clause "New" or "Revised" License'
-		url 'https://opensource.org/licenses/BSD-3-Clause'
-	}
-
-	developer {
-		id 'Clashsoft'
-		name 'Adrian Kunz'
-		email 'clashsoft@hotmail.com'
-	}
-}
 
 sourceCompatibility = 1.8
 
