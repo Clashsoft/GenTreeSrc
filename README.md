@@ -15,7 +15,7 @@ Add the following snippets to your `build.gradle` to set up the plugin:
 plugins {
 	// ...
 	// https://plugins.gradle.org/plugin/de.clashsoft.gentreesrc-gradle
-	id 'de.clashsoft.gentreesrc-gradle' version '0.3.0'
+	id 'de.clashsoft.gentreesrc-gradle' version '0.8.0'
 	// ...
 }
 // ...
@@ -36,7 +36,7 @@ dependencies {
 ## Usage
 
 1. Create a tree definition (`.gts`) file somewhere in the `src/main/gentreesrc` directory.
-   Refer to [Tree.gts](src/test/gentreesrc/Tree.gts) for an example.
+   Refer to the examples for guidance.
    
 2. Run the `gentreesrcJava` Gradle task.
    
@@ -44,3 +44,16 @@ dependencies {
    It is automatically configured as a source directory by the plugin, no extra setup is needed.
 
 4. Repeat step 2 every time you change the tree definition file.
+
+## Examples
+
+Simple examples:
+
+- [AbstractHierarchy.gts](src/test/gentreesrc/AbstractHierarchy.gts)
+- [Properties.gts](src/test/gentreesrc/Properties.gts)
+- [Types.gts](src/test/gentreesrc/Types.gts)
+
+Advanced examples:
+
+- [Tree.gts](src/main/gentreesrc/Tree.gts) - the definitions used by the GenTreeSrc tool itself
+- [FulibScenarios.gts](https://github.com/fujaba/fulibScenarios/blob/master/src/main/gentreesrc/FulibScenarios.gts) - a full compiler using GenTreeSrc to generate its AST classes
