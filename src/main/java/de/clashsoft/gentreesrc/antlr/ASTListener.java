@@ -73,13 +73,14 @@ public class ASTListener extends GenTreeSrcBaseListener
 		final Attributes attributes = new Attributes();
 		for (final GenTreeSrcParser.TypeModifierContext modCtx : ctx.typeModifier())
 		{
-			if (modCtx.ABSTRACT() != null)
+			switch (modCtx.getStart().getType())
 			{
+			case GenTreeSrcLexer.ABSTRACT:
 				attributes.add(Modifier.ABSTRACT);
-			}
-			else if (modCtx.IMPORT() != null)
-			{
+				break;
+			case GenTreeSrcLexer.IMPORT:
 				attributes.add(Modifier.IMPORT);
+				break;
 			}
 		}
 
@@ -130,23 +131,24 @@ public class ASTListener extends GenTreeSrcBaseListener
 		final Attributes attributes = new Attributes();
 		for (final GenTreeSrcParser.PropertyModifierContext modCtx : ctx.propertyModifier())
 		{
-			if (modCtx.DELEGATE() != null)
+			switch (modCtx.getStart().getType())
 			{
+			case GenTreeSrcLexer.DELEGATE:
 				attributes.add(Modifier.DELEGATE);
-			}
-			else if (modCtx.READONLY() != null)
-			{
+				break;
+			case GenTreeSrcLexer.READONLY:
 				attributes.add(Modifier.READONLY);
-			}
-			else if (modCtx.NOCONSTRUCT() != null)
-			{
+				break;
+			case GenTreeSrcLexer.NOCONSTRUCT:
 				attributes.add(Modifier.NOCONSTRUCT);
+				break;
 			}
 		}
 
+		final Type type = this.pop();
 		final String name = ctx.name.getText();
-		final PropertyDecl property = PropertyDecl.of(this.currentDeclaration, attributes, name, this.pop());
-		this.currentDeclaration.getProperties().add(property);
+		final PropertyDecl property = PropertyDecl.of(this.currentDeclaration, attributes, name, type);
+		this.currentDeclaration.getMembers().add(property);
 	}
 
 	// --------------- Types ---------------
