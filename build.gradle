@@ -16,6 +16,34 @@ description = 'A tool that generates Tree and Visitor classes from an AST model 
 
 sourceCompatibility = 1.8
 
+modifyPom {
+	project {
+		name = 'GenTreeSrc'
+		description = project.description
+		url = 'https://github.com/Clashsoft/gentreesrc'
+		inceptionYear = '2019'
+
+		scm {
+			url = 'https://github.com/Clashsoft/gentreesrc'
+		}
+
+		licenses {
+			license {
+				name = 'BSD 3-Clause'
+				url = 'https://opensource.org/licenses/BSD-3-Clause'
+			}
+		}
+
+		developers {
+			developer {
+				id = 'Clashsoft'
+				name = 'Adrian Kunz'
+				email = 'clashsoft@hotmail.com'
+			}
+		}
+	}
+}
+
 repositories {
 	mavenCentral()
 	jcenter()
